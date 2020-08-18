@@ -25,7 +25,6 @@ import fi.tv7.taivastv7.interfaces.EpgDataLoadedListener;
 import fi.tv7.taivastv7.model.SharedViewModel;
 
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
-import static fi.tv7.taivastv7.helpers.Constants.LOCALE_FI;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRESS_BAR_SIZE;
@@ -71,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
             progressBar = findViewById(R.id.startupProgressBar);
             progressBar.setScaleY(PROGRESS_BAR_SIZE);
             progressBar.setScaleX(PROGRESS_BAR_SIZE);
-
-            //Utils.setLocale(getResources(), LOCALE_FI);
 
             viewModel.getEpgData(this);
         }

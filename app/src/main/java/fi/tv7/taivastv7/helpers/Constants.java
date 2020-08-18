@@ -26,9 +26,6 @@ abstract public class Constants {
 
     final static public boolean SHOW_ANIMATIONS = true;
 
-    final static public String LOCALE_FI = "fi";
-
-
     final static public int PROGRAM_VISIBLE_IMAGE_COUNT = 11;
     final static public int GUIDE_ELEMENT_COUNT = 10;
     final static public int TIMER_TIMEOUT = 10000;

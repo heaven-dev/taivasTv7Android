@@ -13,4 +13,24 @@
     <string name="coming_on_channel">Tulossa kanavalta</string>
     <string name="today">Tänään</string>
 
+    <string name="net_tv">Netti-TV</string>
+    <string name="archive">Arkisto</string>
+    <string name="guide">TV-opas</string>
+    <string name="search">Haku</string>
+
+    <string name="we_recommend">Suosittelemme</string>
+    <string name="most_viewed">Katsotuimmat</string>
+    <string name="newest">Uusimmat</string>
+    <string name="categories">Kategoriat</string>
+    <string name="category">Kategoria</string>
+    <string name="series">Sarja</string>
+
+    <string name="first_broadcast">Ensiesitys</string>
+    <string name="duration">Kesto</string>
+    <string name="episode">Jakso</string>
+
+    <string name="back">Takaisin</string>
+    <string name="do_search">Hae</string>
+    <string name="clear">Tyhjennä</string>
+    <string name="search_results">Haku tulokset</string>
 </resources>

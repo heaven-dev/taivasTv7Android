@@ -1,12 +1,6 @@
 package fi.tv7.taivastv7.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,12 +10,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import fi.tv7.taivastv7.BuildConfig;
 import fi.tv7.taivastv7.R;
 import fi.tv7.taivastv7.helpers.Utils;
+import fi.tv7.taivastv7.model.SharedCacheViewModel;
 
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
-import static fi.tv7.taivastv7.helpers.Constants.MAIN_FRAGMENT;
 
 /**
  * Exit fragment. Shows exit overlay when user want to exit from application.
@@ -32,8 +29,8 @@ public class ExitFragment extends Fragment {
     private View root = null;
     private TextView yesButton = null;
     private TextView noButton = null;
-    private FragmentManager fragmentManager = null;
-    private int selectedButtonId = R.id.yesButton;
+
+    private SharedCacheViewModel sharedCacheViewModel = null;
 
     /**
      * Default constructor.
@@ -48,6 +45,22 @@ public class ExitFragment extends Fragment {
      */
     public static ExitFragment newInstance() {
         return new ExitFragment();
+    }
+
+
+    /**
+     * onCreate() - Android lifecycle method.
+     * @param savedInstanceState
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "ExitFragment.onCreate() called.");
+        }
+
+        sharedCacheViewModel = ViewModelProviders.of(requireActivity()).get(SharedCacheViewModel.class);
     }
 
     /**
@@ -76,7 +89,7 @@ public class ExitFragment extends Fragment {
             noButton = root.findViewById(R.id.noButton);
 
             if (yesButton != null && noButton != null) {
-                this.focusToButton(yesButton, noButton);
+                yesButton.requestFocus();
             }
             else {
                 Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
@@ -92,7 +105,7 @@ public class ExitFragment extends Fragment {
     }
 
     /**
-     * Handles keydown events - remote control events.
+     * Handles key down events - remote control events.
      * @param keyCode
      * @param events
      * @return
@@ -103,27 +116,27 @@ public class ExitFragment extends Fragment {
                 Log.d(LOG_TAG, "ExitFragment.onKeyDown(): keyCode: " + keyCode);
             }
 
-            int id = getSelectedButtonId();
+            View focusedView = root.findFocus();
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
                 if (BuildConfig.DEBUG) {
                     Log.d(LOG_TAG, "ExitFragment.onKeyDown(): KEYCODE_DPAD_CENTER: keyCode: " + keyCode);
                 }
 
-                if (id == R.id.yesButton) {
+                if (focusedView == yesButton) {
                     if (BuildConfig.DEBUG) {
-                        Log.d(LOG_TAG, "ExitFragment.onKeyDown(): Yes button selected. Button ID: " + id);
+                        Log.d(LOG_TAG, "ExitFragment.onKeyDown(): Yes button selected.");
                     }
 
                     // Exit from application
                     this.exitFromApplication();
                 }
-                else if (id == R.id.noButton) {
+                else if (focusedView == noButton) {
                     if (BuildConfig.DEBUG) {
-                        Log.d(LOG_TAG, "ExitFragment.onKeyDown(): No button selected. Button ID: " + id);
+                        Log.d(LOG_TAG, "ExitFragment.onKeyDown(): No button selected.");
                     }
 
-                    this.backToMainView();
+                    this.backToView();
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
@@ -131,8 +144,8 @@ public class ExitFragment extends Fragment {
                     Log.d(LOG_TAG, "ExitFragment.onKeyDown(): KEYCODE_DPAD_LEFT: keyCode: " + keyCode);
                 }
 
-                if (id == R.id.noButton) {
-                    this.focusToButton(yesButton, noButton);
+                if (focusedView == noButton) {
+                    yesButton.requestFocus();
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
@@ -140,8 +153,8 @@ public class ExitFragment extends Fragment {
                     Log.d(LOG_TAG, "ExitFragment.onKeyDown(): KEYCODE_DPAD_RIGHT: keyCode: " + keyCode);
                 }
 
-                if (id == R.id.yesButton) {
-                    this.focusToButton(noButton, yesButton);
+                if (focusedView == yesButton) {
+                    noButton.requestFocus();
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -149,7 +162,7 @@ public class ExitFragment extends Fragment {
                     Log.d(LOG_TAG, "ExitFragment.onKeyDown(): KEYCODE_BACK: keyCode: " + keyCode);
                 }
 
-                this.backToMainView();
+                this.backToView();
             }
         }
         catch (Exception e) {
@@ -159,31 +172,16 @@ public class ExitFragment extends Fragment {
             Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
         }
 
-        return false;
+        return true;
     }
 
     /**
-     * Checks fragment manager and creates it if needed.
+     * Returns back to view the user come from.
      */
-    private void checkFragmentManager() {
-        if (fragmentManager == null) {
-            fragmentManager = getActivity().getSupportFragmentManager();
-        }
-    }
-
-    /**
-     * Handles button focus functionality.
-     * @param focus
-     * @param noFocus
-     */
-    private void focusToButton(TextView focus, TextView noFocus) {
-        if (focus != null && noFocus != null) {
-            Context context = getContext();
-
-            focus.setBackground(ContextCompat.getDrawable(context, R.drawable.exit_button_focus));
-            noFocus.setBackground(ContextCompat.getDrawable(context, R.drawable.exit_button_no_focus));
-
-            this.setSelectedButtonId(focus.getId());
+    private void backToView() {
+        String page = sharedCacheViewModel.getPageFromHistory();
+        if (page != null) {
+            Utils.toPage(page, getActivity(), true, true,null);
         }
     }
 
@@ -192,32 +190,5 @@ public class ExitFragment extends Fragment {
      */
     private void exitFromApplication() {
         getActivity().finishAffinity();
-    }
-
-    private void backToMainView() {
-        this.checkFragmentManager();
-
-        Fragment mainFragment = fragmentManager.findFragmentByTag(MAIN_FRAGMENT);
-        if (mainFragment == null) {
-            mainFragment = MainFragment.newInstance();
-        }
-
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mainFragment, MAIN_FRAGMENT).addToBackStack(MAIN_FRAGMENT).commit();
-    }
-
-    /**
-     * Returns selected button id.
-     * @return
-     */
-    private int getSelectedButtonId() {
-        return selectedButtonId;
-    }
-
-    /**
-     * Sets selected button id.
-     * @param id
-     */
-    private void setSelectedButtonId(int id) {
-        selectedButtonId = id;
     }
 }

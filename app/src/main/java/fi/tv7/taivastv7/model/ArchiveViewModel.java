@@ -665,7 +665,7 @@ public class ArchiveViewModel extends ViewModel {
             }
 
             String name = this.getValue(respObj, NAME);
-            if (seriesName != null && name != null) {
+            if (seriesName != null && name != null && name.length() > 0) {
                 seriesAndName += (PIPE_WITH_SPACES + name);
             }
 
@@ -698,7 +698,7 @@ public class ArchiveViewModel extends ViewModel {
                 if (firstBroadcast != null) {
                     String duration = getValue(sourceObj, DURATION);
                     if (duration != null) {
-                        String startTime = String.valueOf(Long.valueOf(firstBroadcast) - Long.valueOf(duration));
+                        String startTime = String.valueOf(Long.parseLong(firstBroadcast) - Long.parseLong(duration));
                         setValue(respObj, BROADCAST_DATE_TIME, getDateTimeByTimeInMs(startTime), false);
                     }
                 }
@@ -792,6 +792,15 @@ public class ArchiveViewModel extends ViewModel {
             setValue(respObj, START_DATE, startDate, false);
             setValue(respObj, END_DATE, endDate, false);
 
+            setValue(respObj, BROADCAST_DATE_TIME, getDateTimeByTimeInMs(start), false);
+            setValue(respObj, BROADCAST_DATE, getDateByTimeInMs(start), false);
+
+            String duration = String.valueOf(Long.parseLong(end) - Long.parseLong(start));
+            setValue(respObj, DURATION, Utils.getTimeStampByDurationMs(duration), false);
+
+            setValue(respObj, EPISODE_NUMBER, this.getValue(sourceObj, EPISODE_NUMBER), true);
+            setValue(respObj, IS_VISIBLE_ON_VOD, ZERO_STR, true);
+
             // series and name
             String series = this.getValue(sourceObj, SERIES);
 
@@ -801,7 +810,7 @@ public class ArchiveViewModel extends ViewModel {
             }
 
             String name = this.getValue(sourceObj, NAME);
-            if (series != null && name != null) {
+            if (series != null && name != null && name.length() > 0) {
                 seriesName += (PIPE_WITH_SPACES + name);
             }
 

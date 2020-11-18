@@ -1,4 +1,4 @@
-package fi.tv7.taivastv7.helpers;
+package fi.tv7.taivastv7.enums;
 
 /**
  * Helper enum.

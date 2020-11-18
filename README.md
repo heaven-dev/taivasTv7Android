@@ -1,13 +1,5 @@
 # taivasTv7Android
 
-## Branches
-
-| Features | Branch |
-| :-------------- | :-------------- |
-| TV channel only | [master](https://github.com/heaven-dev/taivasTv7Android) |
-| TV channel and video archive | [channelAndArchive](https://github.com/heaven-dev/taivasTv7Android/tree/channelAndArchive) |
-
-
 ## Overview
 
 [TV7](https://www.tv7.fi/) Android smart TV application. This application locale is __fi__ (Finnish). Application make possible to watch TV channel and videos from the video archive.

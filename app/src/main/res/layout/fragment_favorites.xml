@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/searchResultFragment"
+    android:id="@+id/favoritesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -23,16 +23,16 @@
             android:orientation="vertical">
 
             <androidx.leanback.widget.VerticalGridView
-                android:id="@+id/searchResultScroll"
+                android:id="@+id/favoritesScroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp" />
 
             <TextView
-                android:id="@+id/searchResultTitle"
+                android:id="@+id/favoritesTitle"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:text="@string/search_results"
+                android:text="@string/favorites"
                 android:textSize="18sp"
                 android:maxLines="1"
                 android:ellipsize="end"
@@ -44,7 +44,7 @@
                 android:textColor="@color/content_area_text" />
 
             <ProgressBar
-                android:id="@+id/searchResultProgress"
+                android:id="@+id/favoritesProgress"
                 style="?android:attr/progressBarStyle"
                 android:indeterminate="true"
                 android:layout_centerInParent="true"
@@ -54,10 +54,10 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/noHitsText"
+                android:id="@+id/noFavorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_hits"
+                android:text="@string/no_favorites"
                 android:textSize="18sp"
                 android:visibility="gone"
                 android:layout_centerInParent="true"
@@ -68,3 +68,4 @@
 
     </LinearLayout>
 </LinearLayout>
+

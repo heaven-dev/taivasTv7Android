@@ -17,6 +17,7 @@
     <string name="archive">Arkisto</string>
     <string name="guide">TV-opas</string>
     <string name="search">Haku</string>
+    <string name="favorites">Suosikit</string>
 
     <string name="we_recommend">Suosittelemme</string>
     <string name="most_viewed">Katsotuimmat</string>
@@ -33,4 +34,9 @@
     <string name="do_search">Hae</string>
     <string name="clear">Tyhjennä</string>
     <string name="search_results">Haku tulokset</string>
+
+    <string name="no_hits">Ei hakuosumia</string>
+    <string name="no_favorites">Ei lisättyjä suosikkeja</string>
+    <string name="added_to_favorites">Lisätty suosikkeihin</string>
+    <string name="removed_from_favorites">Poistettu suosikeista</string>
 </resources>

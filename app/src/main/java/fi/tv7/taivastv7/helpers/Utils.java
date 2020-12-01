@@ -2,9 +2,11 @@ package fi.tv7.taivastv7.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -16,7 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
@@ -25,11 +29,13 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import fi.tv7.taivastv7.BuildConfig;
 import fi.tv7.taivastv7.R;
 import fi.tv7.taivastv7.fragments.ArchiveMainFragment;
 import fi.tv7.taivastv7.fragments.ArchivePlayerFragment;
 import fi.tv7.taivastv7.fragments.CategoriesFragment;
 import fi.tv7.taivastv7.fragments.ExitFragment;
+import fi.tv7.taivastv7.fragments.FavoritesFragment;
 import fi.tv7.taivastv7.fragments.GuideFragment;
 import fi.tv7.taivastv7.fragments.ProgramInfoFragment;
 import fi.tv7.taivastv7.fragments.SearchFragment;
@@ -45,10 +51,15 @@ import static fi.tv7.taivastv7.helpers.Constants.COLON;
 import static fi.tv7.taivastv7.helpers.Constants.DASH;
 import static fi.tv7.taivastv7.helpers.Constants.DOT;
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
-import static fi.tv7.taivastv7.helpers.Constants.FADE_ANIMATION_DURATION;
-import static fi.tv7.taivastv7.helpers.Constants.FADE_ANIMATION_END;
-import static fi.tv7.taivastv7.helpers.Constants.FADE_ANIMATION_START;
+import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_DURATION;
+import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_END;
+import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_START;
+import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_DEFAULT;
+import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.ID;
+import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_FRAGMENT;
@@ -68,7 +79,9 @@ import static fi.tv7.taivastv7.helpers.Constants.ZERO_STR;
 public abstract class Utils {
 
     public static void showErrorToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (context != null && message != null) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void fadePageAnimation(ViewGroup viewGroup) {
@@ -108,8 +121,8 @@ public abstract class Utils {
     }
 
     private static Animation createAnimation() {
-        Animation animation = new AlphaAnimation(FADE_ANIMATION_START, FADE_ANIMATION_END);
-        animation.setDuration(FADE_ANIMATION_DURATION);
+        Animation animation = new AlphaAnimation(FADE_IN_ANIMATION_START, FADE_IN_ANIMATION_END);
+        animation.setDuration(FADE_IN_ANIMATION_DURATION);
         return animation;
     }
 
@@ -190,6 +203,9 @@ public abstract class Utils {
                 }
                 else if (page.equals(SEARCH_RESULT_FRAGMENT)) {
                     fragment = SearchResultFragment.newInstance();
+                }
+                else if (page.equals(FAVORITES_FRAGMENT)) {
+                    fragment = FavoritesFragment.newInstance();
                 }
                 else if (page.equals(EXIT_OVERLAY_FRAGMENT)) {
                     fragment = ExitFragment.newInstance();
@@ -319,5 +335,78 @@ public abstract class Utils {
 
     public static long stringToLong(String value) {
         return Long.parseLong(value);
+    }
+
+    public static JSONArray getSavedFavorites(Context context) throws Exception {
+        JSONArray jsonArray = null;
+
+        if (context != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPref == null) {
+                return null;
+            }
+
+            String jsonStr = sharedPref.getString(FAVORITES_SP_TAG, FAVORITES_SP_DEFAULT);
+            if (jsonStr != null) {
+                jsonArray = new JSONArray(jsonStr);
+
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOG_TAG, "Utils.getSavedFavorites(): Shared prefs: " + jsonStr);
+                }
+            }
+        }
+
+        return jsonArray;
+    }
+
+    public static void saveFavorites(Context context, JSONArray jsonArray) throws Exception {
+        if (context != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPref != null) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                String jsonStr = jsonArray.toString();
+
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOG_TAG, "Utils.saveFavorites(): Shared prefs: " + jsonStr);
+                }
+
+                editor.putString(FAVORITES_SP_TAG, jsonStr);
+                editor.commit();
+            }
+        }
+    }
+
+    public static int isProgramInFavorites(Context context, String programId) throws Exception {
+        int notFound = -1;
+
+        if (context != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+            if (sharedPref != null) {
+                String jsonStr = sharedPref.getString(FAVORITES_SP_TAG, FAVORITES_SP_DEFAULT);
+                if (jsonStr == null) {
+                    return notFound;
+                }
+
+                JSONArray jsonArray = new JSONArray(jsonStr);
+                for(int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    if (obj == null) {
+                        continue;
+                    }
+
+                    String id = Utils.getValue(obj, ID);
+                    if (id == null) {
+                        continue;
+                    }
+
+                    if (id.equals(programId)) {
+                        return i;
+                    }
+                }
+            }
+        }
+
+        return notFound;
     }
 }

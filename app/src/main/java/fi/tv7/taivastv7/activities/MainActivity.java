@@ -1,5 +1,6 @@
 package fi.tv7.taivastv7.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ import fi.tv7.taivastv7.fragments.ArchiveMainFragment;
 import fi.tv7.taivastv7.fragments.ArchivePlayerFragment;
 import fi.tv7.taivastv7.fragments.CategoriesFragment;
 import fi.tv7.taivastv7.fragments.ExitFragment;
+import fi.tv7.taivastv7.fragments.FavoritesFragment;
 import fi.tv7.taivastv7.fragments.GuideFragment;
 import fi.tv7.taivastv7.fragments.ProgramInfoFragment;
 import fi.tv7.taivastv7.fragments.SearchFragment;
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
                     // TV main fragment visible - event to main fragment
                     return ((TvMainFragment) fragment).onKeyDown(keyCode, events);
                 }
-                if (fragment instanceof ArchiveMainFragment) {
+                else if (fragment instanceof ArchiveMainFragment) {
                     // Archive main fragment visible - event to main fragment
                     return ((ArchiveMainFragment) fragment).onKeyDown(keyCode, events);
                 }
@@ -145,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
                     // Search result fragment visible - event to program info fragment
                     return ((SearchResultFragment) fragment).onKeyDown(keyCode, events);
                 }
+                else if (fragment instanceof FavoritesFragment) {
+                    // Favorites fragment visible - event to program info fragment
+                    return ((FavoritesFragment) fragment).onKeyDown(keyCode, events);
+                }
                 else if (fragment instanceof ExitFragment) {
                     // Exit overlay fragment visible - event to exit overlay fragment
                     return ((ExitFragment) fragment).onKeyDown(keyCode, events);
@@ -166,15 +172,28 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
      */
     @Override
     public void onEpgDataLoaded() {
-        if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "MainActivity.onEpgDataLoaded(): EpgData load/parse ok.");
+        try {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "MainActivity.onEpgDataLoaded(): EpgData load/parse ok.");
+            }
+
+            startupLogo.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            fragmentContainer.setVisibility(View.VISIBLE);
+
+            Utils.toPage(TV_MAIN_FRAGMENT, this, false, false, null);
         }
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "MainActivity.onEpgDataLoaded(): Exception: " + e);
+            }
 
-        startupLogo.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-        fragmentContainer.setVisibility(View.VISIBLE);
-
-        Utils.toPage(TV_MAIN_FRAGMENT, this, false, false,null);
+            Context context = getApplicationContext();
+            if (context != null) {
+                String message = context.getString(R.string.toast_something_went_wrong);
+                Utils.showErrorToast(context, message);
+            }
+        }
     }
 
     /**
@@ -182,10 +201,23 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
      */
     @Override
     public void onEpgDataLoadError(String message) {
-        if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "MainActivity.onEpgDataLoadError(): EpgData load/parse error: " + message);
+        try {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "MainActivity.onEpgDataLoadError(): EpgData load/parse error: " + message);
+            }
+
+            Context context = getApplicationContext();
+            if (context != null) {
+                message = context.getString(R.string.toast_something_went_wrong);
+
+                Utils.showErrorToast(context, message);
+            }
         }
-        Utils.showErrorToast(getApplicationContext(), getString(R.string.toast_something_went_wrong));
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "MainActivity.onEpgDataLoadError(): Exception: " + e);
+            }
+        }
     }
 
     /**

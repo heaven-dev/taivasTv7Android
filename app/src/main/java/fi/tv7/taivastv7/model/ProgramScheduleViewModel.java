@@ -107,6 +107,29 @@ public class ProgramScheduleViewModel extends ViewModel {
     }
 
     /**
+     * Returns count (from ongoing program) of next programs from the program list.
+     * @return
+     */
+    public int getCountOfNextPrograms() {
+        int size = 0;
+
+        try {
+            if (programmeList != null) {
+                size = programmeList.size() - this.getOngoingProgramIndex();
+            }
+        }
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "ProgramScheduleViewModel.getCountOfNextPrograms(): Exception: " + e);
+            }
+
+            size = 0;
+        }
+
+        return size;
+    }
+
+    /**
      * Remove past epg program items from the epg list.
      * @return int - removed count
      */

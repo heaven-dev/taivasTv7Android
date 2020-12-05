@@ -56,6 +56,7 @@ import static fi.tv7.taivastv7.helpers.Constants.LINK_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.MOST_VIEWED_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.NAME;
+import static fi.tv7.taivastv7.helpers.Constants.NEGATIVE_ONE_STR;
 import static fi.tv7.taivastv7.helpers.Constants.NEWEST_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.OFFSET_PARAM;
@@ -698,7 +699,10 @@ public class ArchiveViewModel extends ViewModel {
                     }
                 }
                 else {
-                    setValue(respObj, IS_VISIBLE_ON_VOD, ZERO_STR, true);
+                    String visibleOnVodSince = this.getValue(sourceObj, VISIBLE_ON_VOD_SINCE);
+                    if (visibleOnVodSince == null) {
+                        setValue(respObj, IS_VISIBLE_ON_VOD, NEGATIVE_ONE_STR, true);
+                    }
                 }
 
                 firstBroadcast = getValue(sourceObj, VISIBLE_ON_VOD_SINCE);

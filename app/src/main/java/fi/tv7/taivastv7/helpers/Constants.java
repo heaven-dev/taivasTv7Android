@@ -52,6 +52,7 @@ abstract public class Constants {
     public static final String SEARCH_FRAGMENT = "search_fragment";
     public static final String SEARCH_RESULT_FRAGMENT = "search_result_fragment";
     public static final String FAVORITES_FRAGMENT = "favorites_fragment";
+    public static final String ABOUT_FRAGMENT = "about_fragment";
     public static final String EXIT_OVERLAY_FRAGMENT = "exit_overlay_fragment";
 
     public static final String CHANNEL_URL_PARAM = "channel_url";
@@ -82,6 +83,10 @@ abstract public class Constants {
     public static final String AUDIO_INDEX_ENABLE_LANG = "RU1";
 
     public static final String TV_BRAND = "Android";
+
+    public static final String OS_VERSION = "os.version";
+    public static final String LEFT_BRACKET = "(";
+    public static final String RIGHT_BRACKET = ")";
 
     public static final String QUESTION_MARK = "?";
     public static final String AMPERSAND = "&";
@@ -237,7 +242,8 @@ abstract public class Constants {
         new MenuItem(R.id.archiveMenuContainer, R.id.archiveMenuText),
         new MenuItem(R.id.guideMenuContainer, R.id.guideMenuText),
         new MenuItem(R.id.searchMenuContainer, R.id.searchMenuText),
-        new MenuItem(R.id.favoritesMenuContainer, R.id.favoritesMenuText)
+        new MenuItem(R.id.favoritesMenuContainer, R.id.favoritesMenuText),
+        new MenuItem(R.id.aboutMenuContainer, R.id.aboutMenuText)
     ));
 
     public static final List<Integer> ARCHIVE_MAIN_CONTENT_ROW_IDS = new ArrayList<>(Arrays.asList(

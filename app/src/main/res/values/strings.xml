@@ -18,6 +18,7 @@
     <string name="guide">TV-opas</string>
     <string name="search">Haku</string>
     <string name="favorites">Suosikit</string>
+    <string name="about">Tietoja</string>
 
     <string name="we_recommend">Suosittelemme</string>
     <string name="most_viewed">Katsotuimmat</string>
@@ -39,4 +40,11 @@
     <string name="no_favorites">Ei lisättyjä suosikkeja</string>
     <string name="added_to_favorites">Lisätty suosikkeihin</string>
     <string name="removed_from_favorites">Poistettu suosikeista</string>
+
+    <string name="app_package_title">App package:</string>
+    <string name="app_version_title">App version:</string>
+    <string name="os_version_title">OS version:</string>
+    <string name="os_api_level_title">OS API level:</string>
+    <string name="device_title">Device:</string>
+    <string name="model_and_product_title">Model (Product):</string>
 </resources>

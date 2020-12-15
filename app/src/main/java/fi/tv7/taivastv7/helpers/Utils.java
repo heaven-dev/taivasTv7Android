@@ -31,6 +31,7 @@ import java.util.TimeZone;
 
 import fi.tv7.taivastv7.BuildConfig;
 import fi.tv7.taivastv7.R;
+import fi.tv7.taivastv7.fragments.AboutFragment;
 import fi.tv7.taivastv7.fragments.ArchiveMainFragment;
 import fi.tv7.taivastv7.fragments.ArchivePlayerFragment;
 import fi.tv7.taivastv7.fragments.CategoriesFragment;
@@ -44,6 +45,7 @@ import fi.tv7.taivastv7.fragments.SeriesFragment;
 import fi.tv7.taivastv7.fragments.TvMainFragment;
 import fi.tv7.taivastv7.fragments.TvPlayerFragment;
 
+import static fi.tv7.taivastv7.helpers.Constants.ABOUT_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_PLAYER_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.CATEGORIES_FRAGMENT;
@@ -206,6 +208,9 @@ public abstract class Utils {
                 }
                 else if (page.equals(FAVORITES_FRAGMENT)) {
                     fragment = FavoritesFragment.newInstance();
+                }
+                else if (page.equals(ABOUT_FRAGMENT)) {
+                    fragment = AboutFragment.newInstance();
                 }
                 else if (page.equals(EXIT_OVERLAY_FRAGMENT)) {
                     fragment = ExitFragment.newInstance();

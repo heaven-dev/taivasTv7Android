@@ -1,3 +1,14 @@
+# 17.12.2020 18:40
+
+### Bug Fixes
+
+* The android.software.leanback attribute set to true in manifest file.
+
+### Features
+
+* none
+
+
 # 16.12.2020 12:11
 
 ### Bug Fixes

@@ -1,3 +1,15 @@
+# 03.01.2021 10:00
+
+### Bug Fixes
+
+* If video stream of the video of video archive is active and the HOME button of the remote control is pressed the application pauses the video before
+  returning the home screen of the TV.
+
+### Features
+
+* none
+
+
 # 25.12.2020 12:00
 
 ### Bug Fixes

@@ -32,6 +32,8 @@ import fi.tv7.taivastv7.helpers.Utils;
 import fi.tv7.taivastv7.model.SharedCacheViewModel;
 
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_PLAYER_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.ASPECT_RATIO;
+import static fi.tv7.taivastv7.helpers.Constants.ASPECT_RATIO_16_9;
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
 import static fi.tv7.taivastv7.helpers.Constants.COLON_WITH_SPACE;
@@ -246,6 +248,20 @@ public class ProgramInfoFragment extends Fragment {
                         }
                         else {
                             episodeNbr.setVisibility(View.GONE);
+                        }
+                    }
+
+                    TextView aspectRatio = root.findViewById(R.id.aspectRatio);
+                    if (aspectRatio != null) {
+                        valueText = Utils.getValue(selectedProgram, ASPECT_RATIO);
+                        if (valueText != null && valueText.length() > 0 && !valueText.equals(ZERO_STR) && !valueText.equals(ASPECT_RATIO_16_9)) {
+                            titleText = resources.getString(R.string.aspect_ratio);
+                            valueText = titleText + COLON_WITH_SPACE + valueText;
+
+                            aspectRatio.setText(valueText);
+                        }
+                        else {
+                            aspectRatio.setVisibility(View.GONE);
                         }
                     }
 

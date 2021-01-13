@@ -26,6 +26,7 @@ import fi.tv7.taivastv7.interfaces.ArchiveDataLoadedListener;
 import static fi.tv7.taivastv7.helpers.Constants.AMPERSAND;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_BASE_URL;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_LANGUAGE;
+import static fi.tv7.taivastv7.helpers.Constants.ASPECT_RATIO;
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE;
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_RECOMMENDATIONS_METHOD;
@@ -654,14 +655,16 @@ public class ArchiveViewModel extends ViewModel {
             setValue(respObj, SERIES_NAME, this.getValue(sourceObj, SERIES_NAME), false);
             setValue(respObj, SNAME, this.getValue(sourceObj, SNAME), false);
 
-            String firstBroadcast = getValue(sourceObj, FIRST_BROADCAST);
+            String firstBroadcast = this.getValue(sourceObj, FIRST_BROADCAST);
             if (firstBroadcast == null) {
-                firstBroadcast = getValue(sourceObj, START_DATE);
+                firstBroadcast = this.getValue(sourceObj, START_DATE);
             }
 
-            setValue(respObj, BROADCAST_DATE_TIME, getDateTimeByTimeInMs(firstBroadcast), false);
-            setValue(respObj, BROADCAST_DATE, getDateByTimeInMs(firstBroadcast), false);
+            setValue(respObj, BROADCAST_DATE_TIME, this.getDateTimeByTimeInMs(firstBroadcast), false);
+            setValue(respObj, BROADCAST_DATE, this.getDateByTimeInMs(firstBroadcast), false);
             setValue(respObj, DURATION, Utils.getTimeStampByDurationMs(this.getValue(sourceObj, DURATION)), false);
+
+            setValue(respObj, ASPECT_RATIO, this.getValue(sourceObj, ASPECT_RATIO), false);
 
             String seriesName = this.getValue(respObj, SERIES_NAME);
             if (seriesName == null) {

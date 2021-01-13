@@ -31,6 +31,7 @@
     <string name="first_broadcast">Ensiesitys</string>
     <string name="duration">Kesto</string>
     <string name="episode">Jakso</string>
+    <string name="aspect_ratio">Videon kuvasuhde</string>
 
     <string name="back">Takaisin</string>
     <string name="do_search">Hae</string>

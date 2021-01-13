@@ -46,6 +46,7 @@ import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_RECOMMENDATIONS_METHO
 import static fi.tv7.taivastv7.helpers.Constants.CATEGORIES_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.CATEGORIES_ROW_ID;
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.ID;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.MOST_VIEWED_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.MOST_VIEWED_ROW_ID;
@@ -56,6 +57,7 @@ import static fi.tv7.taivastv7.helpers.Constants.NEWEST_ROW_ID;
 import static fi.tv7.taivastv7.helpers.Constants.PARENT_CATEGORIES_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.PARENT_NAME;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.RECOMMENDATIONS_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.RECOMMENDATIONS_ROW_ID;
 import static fi.tv7.taivastv7.helpers.Constants.SUB_CATEGORIES_METHOD;
@@ -318,6 +320,18 @@ public class ArchiveMainFragment extends Fragment implements FragmentManager.OnB
                 Log.d(LOG_TAG, "Archive data loaded. Type: " + type);
             }
 
+            if (type.equals(PROGRAM_INFO_METHOD)) {
+                Utils.hideProgressBar(root, this.getProgressBarByRow());
+
+                if (jsonArray != null && jsonArray.length() == 1) {
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    if (obj != null) {
+                        sharedCacheViewModel.setSelectedProgram(obj);
+
+                        Utils.toPage(PROGRAM_INFO_FRAGMENT, getActivity(), true, false, null);
+                    }
+                }
+            }
             if (type.equals(BROADCAST_RECOMMENDATIONS_METHOD)) {
                 if (jsonArray != null && jsonArray.length() < 4) {
                     archiveViewModel.getRecommendPrograms(Utils.getTodayUtcFormattedLocalDate(), 30, 0, this);
@@ -408,12 +422,11 @@ public class ArchiveMainFragment extends Fragment implements FragmentManager.OnB
                     if (focusedRow != CATEGORIES_ROW_ID) {
                         JSONObject program = this.getProgramByIndex(pos);
                         if (program != null) {
-                            sharedCacheViewModel.setSelectedProgram(program);
                             sharedCacheViewModel.setPageToHistory(ARCHIVE_MAIN_FRAGMENT);
 
                             this.cachePageState();
 
-                            Utils.toPage(PROGRAM_INFO_FRAGMENT, getActivity(), true, false,null);
+                            this.loadProgramInfo(program);
                         }
                     }
                     else {
@@ -637,7 +650,34 @@ public class ArchiveMainFragment extends Fragment implements FragmentManager.OnB
         else {
             archiveViewModel.getSubCategories(this);
         }
+    }
 
+    /**
+     * Calls get program info method.
+     * @param obj
+     * @throws Exception
+     */
+    private void loadProgramInfo(JSONObject obj) throws Exception {
+        Utils.showProgressBar(root, this.getProgressBarByRow());
+        String programId = Utils.getValue(obj, ID);
+        if (programId != null) {
+            archiveViewModel.getProgramInfo(programId, this);
+        }
+    }
+
+    private int getProgressBarByRow() {
+        int progressBarId = 0;
+        if (focusedRow == RECOMMENDATIONS_ROW_ID) {
+            progressBarId = R.id.recommendProgress;
+        }
+        else if (focusedRow == MOST_VIEWED_ROW_ID) {
+            progressBarId = R.id.mostViewedProgress;
+        }
+        else if (focusedRow == NEWEST_ROW_ID) {
+            progressBarId = R.id.newestProgress;
+        }
+
+        return progressBarId;
     }
 
     /**

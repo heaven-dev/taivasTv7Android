@@ -1,3 +1,14 @@
+# 16.01.2021 12:00
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Order of recommendations methods call changed in the archive main fragment.
+
+
 # 13.01.2021 12:00
 
 ### Bug Fixes

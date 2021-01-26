@@ -4,6 +4,8 @@
 
 [TV7](https://www.tv7.fi/) Android smart TV application. This application locale is __fi__ (Finnish). Application make possible to watch TV channel and videos from the video archive.
 
+This application is already in the [Google Play store](https://play.google.com/store/apps/details?id=fi.tv7.taivastv7). There are some screenshots of the application.
+
 Developer pages of [Android TV](https://developer.android.com/tv).
 Guide of [Android TV](https://developer.android.com/training/tv).
 

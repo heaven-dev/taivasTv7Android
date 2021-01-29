@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "MainActivity.onCreate() called.");
             }
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             fragmentManager = Utils.getFragmentManager(this);
 

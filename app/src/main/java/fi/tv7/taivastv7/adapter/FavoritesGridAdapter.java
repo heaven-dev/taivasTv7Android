@@ -19,6 +19,7 @@ import fi.tv7.taivastv7.R;
 import fi.tv7.taivastv7.helpers.Utils;
 
 import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
+import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
@@ -114,8 +115,11 @@ public class FavoritesGridAdapter extends RecyclerView.Adapter<FavoritesGridAdap
                 }
 
                 value = Utils.getValue(obj, CAPTION);
-                if (value != null) {
+                if (value != null && value.length() > 0) {
                     holder.caption.setText(value);
+                }
+                else {
+                    holder.caption.setText(EMPTY);
                 }
             }
         }

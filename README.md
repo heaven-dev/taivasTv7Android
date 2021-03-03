@@ -1,5 +1,15 @@
 # taivasTv7Android
 
+## Similar app on the other TV platforms
+  - [Samsung](https://github.com/heaven-dev/tv7SamsungNg)
+  - [LG](https://github.com/heaven-dev/tv7LgSpa)
+
+## Demo
+
+Similar app running on Samsung TV emulator (API version 6.0).
+
+![Demo](https://github.com/heaven-dev/demo/blob/main/demo/demo.gif)
+
 ## Overview
 
 [TV7](https://www.tv7.fi/) Android smart TV application. This application locale is __fi__ (Finnish). Application make possible to watch TV channel and videos from the video archive.

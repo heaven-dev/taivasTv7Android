@@ -237,18 +237,22 @@ public class ProgramScheduleViewModel extends ViewModel {
                 Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): called.");
             }
 
-            this.clearCache();
-
-            final String url = EPG_URL +
-                    QUESTION_MARK + EPG_CHANNEL_PARAM + EQUAL + EPG_CHANNEL +
-                    AMPERSAND + EPG_LANG_PARAM + EQUAL + EPG_LANG +
-                    AMPERSAND + EPG_DURATION_PARAM + EQUAL + EPG_DURATION;
-
-            if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): Epg URL: " + url);
+            if (!Utils.isConnectedToGateway()) {
+                epgDataLoadedListener.onNoNetwork();
             }
+            else {
+                this.clearCache();
 
-            StringRequest jsonRequest = new StringRequest(
+                final String url = EPG_URL +
+                        QUESTION_MARK + EPG_CHANNEL_PARAM + EQUAL + EPG_CHANNEL +
+                        AMPERSAND + EPG_LANG_PARAM + EQUAL + EPG_LANG +
+                        AMPERSAND + EPG_DURATION_PARAM + EQUAL + EPG_DURATION;
+
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): Epg URL: " + url);
+                }
+
+                StringRequest jsonRequest = new StringRequest(
                     Request.Method.GET,
                     url,
                     new Response.Listener<String>() {
@@ -262,7 +266,7 @@ public class ProgramScheduleViewModel extends ViewModel {
                                 processEpgXmlData(response);
                                 epgDataLoadedListener.onEpgDataLoaded();
                             }
-                            catch(Exception e) {
+                            catch (Exception e) {
                                 epgDataLoadedListener.onEpgDataLoadError(e.getMessage());
                             }
                         }
@@ -276,14 +280,15 @@ public class ProgramScheduleViewModel extends ViewModel {
                             epgDataLoadedListener.onEpgDataLoadError(error.getMessage());
                         }
                     }
-            );
+                );
 
-            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    VOLLEY_TIMEOUT_VALUE,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                        VOLLEY_TIMEOUT_VALUE,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-            TaivasTv7.getInstance().addToRequestQueue(jsonRequest);
+                TaivasTv7.getInstance().addToRequestQueue(jsonRequest);
+            }
         }
         catch(Exception e) {
             if (BuildConfig.DEBUG) {

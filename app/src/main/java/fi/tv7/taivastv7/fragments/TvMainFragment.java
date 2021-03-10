@@ -1,6 +1,5 @@
 package fi.tv7.taivastv7.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -92,18 +91,26 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        try {
+            super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "TvMainFragment.onCreate() called.");
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "TvMainFragment.onCreate() called.");
+            }
+
+            viewModel = ViewModelProviders.of(requireActivity()).get(ProgramScheduleViewModel.class);
+            sharedCacheViewModel = ViewModelProviders.of(requireActivity()).get(SharedCacheViewModel.class);
+
+            FragmentManager fragmentManager = Utils.getFragmentManager(getActivity());
+            if (fragmentManager != null) {
+                fragmentManager.addOnBackStackChangedListener(this);
+            }
         }
-
-        viewModel = ViewModelProviders.of(requireActivity()).get(ProgramScheduleViewModel.class);
-        sharedCacheViewModel = ViewModelProviders.of(requireActivity()).get(SharedCacheViewModel.class);
-
-        FragmentManager fragmentManager = Utils.getFragmentManager(getActivity());
-        if (fragmentManager != null) {
-            fragmentManager.addOnBackStackChangedListener(this);
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "TvMainFragment.onCreate(): Exception: " + e);
+            }
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -152,7 +159,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "TvMainFragment.onCreateView(): Exception: " + e);
             }
-            Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
+            Utils.toErrorPage(getActivity());
         }
         return root;
     }
@@ -164,16 +171,24 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        try {
+            super.onViewCreated(view, savedInstanceState);
 
-        startButton = root.findViewById(R.id.startButton);
-        if (startButton != null) {
-            startButton.post(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.requestFocus(startButton);
-                }
-            });
+            startButton = root.findViewById(R.id.startButton);
+            if (startButton != null) {
+                startButton.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.requestFocus(startButton);
+                    }
+                });
+            }
+        }
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "TvMainFragment.onViewCreated(): Exception: " + e);
+            }
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -215,11 +230,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
                 Log.d(LOG_TAG, "TvMainFragment.onEpgDataLoaded(): Exception: " + e);
             }
 
-            Context context = getContext();
-            if (context != null) {
-                String message = context.getString(R.string.toast_something_went_wrong);
-                Utils.showErrorToast(context, message);
-            }
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -228,23 +239,23 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
      */
     @Override
     public void onEpgDataLoadError(String message) {
-        try {
-            if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "TvMainFragment.onEpgDataLoadError(): EpgData load/parse error: " + message);
-            }
-
-            Context context = getContext();
-            if (context != null) {
-                message = context.getString(R.string.toast_something_went_wrong);
-
-                Utils.showErrorToast(context, message);
-            }
+        if (BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "TvMainFragment.onEpgDataLoadError(): EpgData load/parse error: " + message);
         }
-        catch(Exception e) {
-            if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "TvMainFragment.onEpgDataLoadError(): Exception: " + e);
-            }
+
+        Utils.toErrorPage(getActivity());
+    }
+
+    /**
+     * No network callback.
+     */
+    @Override
+    public void onNoNetwork() {
+        if (BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "MainActivity.onNoNetwork(): ***No network connection!***");
         }
+
+        Utils.toErrorPage(getActivity());
     }
 
     /**
@@ -355,7 +366,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "TvMainFragment.addOngoingProgramImage(): Exception: " + e);
             }
-            Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -389,7 +400,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "TvMainFragment.addComingProgramImages(): Exception: " + e);
             }
-            Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -450,7 +461,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "TvMainFragment.updateGuide(): Exception: " + e);
             }
-            Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
+            Utils.toErrorPage(getActivity());
         }
     }
 
@@ -637,7 +648,7 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (BuildConfig.DEBUG) {
                 Log.d(LOG_TAG, "TvMainFragment.onKeyDown(): Exception: " + e);
             }
-            Utils.showErrorToast(getContext(), getString(R.string.toast_something_went_wrong));
+            Utils.toErrorPage(getActivity());
         }
 
         return true;

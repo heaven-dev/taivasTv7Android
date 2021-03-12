@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -237,58 +238,64 @@ public class ProgramScheduleViewModel extends ViewModel {
                 Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): called.");
             }
 
-            if (!Utils.isConnectedToGateway()) {
-                epgDataLoadedListener.onNoNetwork();
+            TaivasTv7 app = TaivasTv7.getInstance();
+
+            this.clearCache();
+
+            final String url = EPG_URL +
+                    QUESTION_MARK + EPG_CHANNEL_PARAM + EQUAL + EPG_CHANNEL +
+                    AMPERSAND + EPG_LANG_PARAM + EQUAL + EPG_LANG +
+                    AMPERSAND + EPG_DURATION_PARAM + EQUAL + EPG_DURATION;
+
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): Epg URL: " + url);
             }
-            else {
-                this.clearCache();
 
-                final String url = EPG_URL +
-                        QUESTION_MARK + EPG_CHANNEL_PARAM + EQUAL + EPG_CHANNEL +
-                        AMPERSAND + EPG_LANG_PARAM + EQUAL + EPG_LANG +
-                        AMPERSAND + EPG_DURATION_PARAM + EQUAL + EPG_DURATION;
-
-                if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): Epg URL: " + url);
-                }
-
-                StringRequest jsonRequest = new StringRequest(
-                    Request.Method.GET,
-                    url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                if (BuildConfig.DEBUG) {
-                                    Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): onResponse()");
-                                }
-
-                                processEpgXmlData(response);
-                                epgDataLoadedListener.onEpgDataLoaded();
-                            }
-                            catch (Exception e) {
-                                epgDataLoadedListener.onEpgDataLoadError(e.getMessage());
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+            StringRequest jsonRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
                             if (BuildConfig.DEBUG) {
-                                Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): ErrorListener(): Error fetching json: " + error.toString());
+                                Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): onResponse()");
                             }
-                            epgDataLoadedListener.onEpgDataLoadError(error.getMessage());
+
+                            processEpgXmlData(response);
+                            epgDataLoadedListener.onEpgDataLoaded();
+                        }
+                        catch (Exception e) {
+                            epgDataLoadedListener.onEpgDataLoadError(e.getMessage());
                         }
                     }
-                );
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (BuildConfig.DEBUG) {
+                            Log.d(LOG_TAG, "ProgramScheduleViewModel.onErrorResponse(): Error fetching json: " + error.getMessage());
+                        }
 
-                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                        VOLLEY_TIMEOUT_VALUE,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        if (epgDataLoadedListener != null) {
+                            if (error instanceof NoConnectionError) {
+                                app.setConnectedToNet(false);
+                                epgDataLoadedListener.onNoNetwork();
+                            }
+                            else {
+                                epgDataLoadedListener.onEpgDataLoadError(error.getMessage());
+                            }
+                        }
+                    }
+                }
+            );
 
-                TaivasTv7.getInstance().addToRequestQueue(jsonRequest);
-            }
+            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    VOLLEY_TIMEOUT_VALUE,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            app.addToRequestQueue(jsonRequest);
         }
         catch(Exception e) {
             if (BuildConfig.DEBUG) {

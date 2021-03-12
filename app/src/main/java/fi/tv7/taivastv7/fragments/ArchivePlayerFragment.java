@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SubtitleView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
@@ -48,6 +49,7 @@ import java.util.TimerTask;
 
 import fi.tv7.taivastv7.BuildConfig;
 import fi.tv7.taivastv7.R;
+import fi.tv7.taivastv7.TaivasTv7;
 import fi.tv7.taivastv7.helpers.Utils;
 import fi.tv7.taivastv7.interfaces.ArchiveDataLoadedListener;
 import fi.tv7.taivastv7.model.ArchiveViewModel;
@@ -532,10 +534,22 @@ public class ArchivePlayerFragment extends Fragment implements Player.EventListe
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         if (error.type == ExoPlaybackException.TYPE_SOURCE) {
-            IOException e = error.getSourceException();
+            IOException cause = error.getSourceException();
 
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception: " + e);
+                Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception: " + cause);
+            }
+
+            if (cause instanceof HttpDataSource.HttpDataSourceException) {
+                HttpDataSource.HttpDataSourceException httpError = (HttpDataSource.HttpDataSourceException) cause;
+
+                if (BuildConfig.DEBUG) {
+                    Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception: " + httpError.getMessage());
+                }
+
+                if (httpError.type == HttpDataSource.HttpDataSourceException.TYPE_OPEN || httpError.type == HttpDataSource.HttpDataSourceException.TYPE_READ) {
+                    TaivasTv7.getInstance().setConnectedToNet(false);
+                }
             }
 
             Utils.toErrorPage(getActivity());

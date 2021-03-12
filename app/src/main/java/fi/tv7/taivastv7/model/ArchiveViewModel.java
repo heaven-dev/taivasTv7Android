@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -559,18 +560,13 @@ public class ArchiveViewModel extends ViewModel {
      * @param archiveDataLoadedListener
      */
     private void runQuery(final String url, final String type, final Object data, final ArchiveDataLoadedListener archiveDataLoadedListener) {
-        if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "ArchiveViewModel.runQuery(): called.");
-        }
-
-        if (!Utils.isConnectedToGateway()) {
+        try {
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "ArchiveViewModel.runQuery(): ***Not connected to gateway!***");
+                Log.d(LOG_TAG, "ArchiveViewModel.runQuery(): called.");
             }
 
-            archiveDataLoadedListener.onNoNetwork(type);
-        }
-        else {
+            TaivasTv7 app = TaivasTv7.getInstance();
+
             JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -646,11 +642,17 @@ public class ArchiveViewModel extends ViewModel {
                     public void onErrorResponse(VolleyError error) {
                         try {
                             if (BuildConfig.DEBUG) {
-                                Log.d(LOG_TAG, "ArchiveViewModel.onErrorResponse(): Error fetching json: " + error.toString());
+                                Log.d(LOG_TAG, "ArchiveViewModel.onErrorResponse(): Error fetching json: " + error.getMessage());
                             }
 
                             if (archiveDataLoadedListener != null) {
-                                archiveDataLoadedListener.onArchiveDataLoadError(error.getMessage(), type);
+                                if (error instanceof NoConnectionError) {
+                                    app.setConnectedToNet(false);
+                                    archiveDataLoadedListener.onNoNetwork(type);
+                                }
+                                else {
+                                    archiveDataLoadedListener.onArchiveDataLoadError(error.getMessage(), type);
+                                }
                             }
                         }
                         catch (Exception e) {
@@ -671,7 +673,13 @@ public class ArchiveViewModel extends ViewModel {
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-            TaivasTv7.getInstance().addToRequestQueue(jsonRequest);
+            app.addToRequestQueue(jsonRequest);
+        }
+        catch(Exception e) {
+            if (BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "ArchiveViewModel.runQuery(): Exception: " + e.getMessage());
+            }
+            archiveDataLoadedListener.onArchiveDataLoadError(e.getMessage(), type);
         }
     }
 

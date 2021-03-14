@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.ui.SubtitleView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.LoadErrorHandlingPolicy;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
@@ -49,7 +50,6 @@ import java.util.TimerTask;
 
 import fi.tv7.taivastv7.BuildConfig;
 import fi.tv7.taivastv7.R;
-import fi.tv7.taivastv7.TaivasTv7;
 import fi.tv7.taivastv7.helpers.Utils;
 import fi.tv7.taivastv7.interfaces.ArchiveDataLoadedListener;
 import fi.tv7.taivastv7.model.ArchiveViewModel;
@@ -70,7 +70,6 @@ import static fi.tv7.taivastv7.helpers.Constants.IS_SUBTITLE;
 import static fi.tv7.taivastv7.helpers.Constants.LANG_ID;
 import static fi.tv7.taivastv7.helpers.Constants.LINK_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
-import static fi.tv7.taivastv7.helpers.Constants.NO_NETWORK_CONNECTION_ERROR;
 import static fi.tv7.taivastv7.helpers.Constants.ONE_STR;
 import static fi.tv7.taivastv7.helpers.Constants.PATH;
 import static fi.tv7.taivastv7.helpers.Constants.PAUSE_START_ICON_ANIMATION_DURATION;
@@ -83,6 +82,7 @@ import static fi.tv7.taivastv7.helpers.Constants.POSITION;
 import static fi.tv7.taivastv7.helpers.Constants.QUESTION_MARK;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
 import static fi.tv7.taivastv7.helpers.Constants.SLASH_WITH_SPACES;
+import static fi.tv7.taivastv7.helpers.Constants.STREAM_ERROR_RETRY_DELAY;
 import static fi.tv7.taivastv7.helpers.Constants.SUBTITLES_URL;
 import static fi.tv7.taivastv7.helpers.Constants.TRANSLATION_LANG_ID;
 import static fi.tv7.taivastv7.helpers.Constants.TV_BRAND;
@@ -255,7 +255,7 @@ public class ArchivePlayerFragment extends Fragment implements Player.EventListe
             Context context = getContext();
 
             DataSource.Factory dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(context, getString(R.string.app_name)));
-            HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).setAllowChunklessPreparation(true).createMediaSource(Uri.parse(videoUrl));
+            HlsMediaSource hlsMediaSource = new HlsMediaSource.Factory(dataSourceFactory).setLoadErrorHandlingPolicy(getErrorHandlingPolicy()).setAllowChunklessPreparation(true).createMediaSource(Uri.parse(videoUrl));
             exoPlayer = new SimpleExoPlayer.Builder(context).build();
             playerView.setPlayer(exoPlayer);
 
@@ -297,6 +297,35 @@ public class ArchivePlayerFragment extends Fragment implements Player.EventListe
             }
             Utils.toErrorPage(getActivity());
         }
+    }
+
+    /**
+     * Stream error handling policy.
+     * @return
+     */
+    private static LoadErrorHandlingPolicy getErrorHandlingPolicy() {
+        return new LoadErrorHandlingPolicy() {
+
+            @Override
+            public long getBlacklistDurationMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
+                return 0;
+            }
+
+            @Override
+            public long getRetryDelayMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
+                if (exception instanceof HttpDataSource.HttpDataSourceException) {
+                    return STREAM_ERROR_RETRY_DELAY;
+                }
+                else {
+                    return C.TIME_UNSET;
+                }
+            }
+
+            @Override
+            public int getMinimumLoadableRetryCount(int dataType) {
+                return Integer.MAX_VALUE;
+            }
+        };
     }
 
     /**
@@ -538,22 +567,23 @@ public class ArchivePlayerFragment extends Fragment implements Player.EventListe
             IOException cause = error.getSourceException();
 
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception: " + cause);
+                Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception cause: " + cause);
             }
 
             if (cause instanceof HttpDataSource.HttpDataSourceException) {
                 HttpDataSource.HttpDataSourceException httpError = (HttpDataSource.HttpDataSourceException) cause;
 
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception: " + httpError.getMessage());
+                    Log.d(LOG_TAG, "ArchivePlayerFragment.onPlayerError(): Exception message: " + httpError.getMessage());
                 }
 
+                /*
                 if (httpError.type == HttpDataSource.HttpDataSourceException.TYPE_OPEN || httpError.type == HttpDataSource.HttpDataSourceException.TYPE_READ) {
                     TaivasTv7.getInstance().setErrorCode(NO_NETWORK_CONNECTION_ERROR);
+                    Utils.toErrorPage(getActivity());
                 }
+                */
             }
-
-            Utils.toErrorPage(getActivity());
         }
     }
 

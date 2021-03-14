@@ -1,3 +1,14 @@
+# 14.03.2021 14:46
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added stream error retry policy.
+
+
 # 14.03.2021 10:48
 
 ### Bug Fixes

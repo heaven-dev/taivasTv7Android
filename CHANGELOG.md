@@ -7,6 +7,7 @@
 ### Features
 
 * Added stream error retry policy.
+* Version 9.
 
 
 # 14.03.2021 10:48

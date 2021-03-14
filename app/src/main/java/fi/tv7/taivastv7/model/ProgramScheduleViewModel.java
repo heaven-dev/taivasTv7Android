@@ -8,6 +8,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -52,6 +53,9 @@ import static fi.tv7.taivastv7.helpers.Constants.EQUAL;
 import static fi.tv7.taivastv7.helpers.Constants.ICON;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.MS_STR;
+import static fi.tv7.taivastv7.helpers.Constants.NETWORK_REQUEST_FAILED_ERROR;
+import static fi.tv7.taivastv7.helpers.Constants.NETWORK_REQUEST_TIMEOUT_ERROR;
+import static fi.tv7.taivastv7.helpers.Constants.NO_NETWORK_CONNECTION_ERROR;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAMME;
 import static fi.tv7.taivastv7.helpers.Constants.QUESTION_MARK;
 import static fi.tv7.taivastv7.helpers.Constants.SRC;
@@ -252,42 +256,47 @@ public class ProgramScheduleViewModel extends ViewModel {
             }
 
             StringRequest jsonRequest = new StringRequest(
-                Request.Method.GET,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
+                    Request.Method.GET,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                if (BuildConfig.DEBUG) {
+                                    Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): onResponse()");
+                                }
+
+                                processEpgXmlData(response);
+                                epgDataLoadedListener.onEpgDataLoaded();
+                            }
+                            catch (Exception e) {
+                                epgDataLoadedListener.onEpgDataLoadError(e.getMessage());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
                             if (BuildConfig.DEBUG) {
-                                Log.d(LOG_TAG, "ProgramScheduleViewModel.getEpgData(): onResponse()");
+                                Log.d(LOG_TAG, "ProgramScheduleViewModel.onErrorResponse(): Error fetching json: " + error.getMessage());
                             }
 
-                            processEpgXmlData(response);
-                            epgDataLoadedListener.onEpgDataLoaded();
-                        }
-                        catch (Exception e) {
-                            epgDataLoadedListener.onEpgDataLoadError(e.getMessage());
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (BuildConfig.DEBUG) {
-                            Log.d(LOG_TAG, "ProgramScheduleViewModel.onErrorResponse(): Error fetching json: " + error.getMessage());
-                        }
-
-                        if (epgDataLoadedListener != null) {
-                            if (error instanceof NoConnectionError) {
-                                app.setConnectedToNet(false);
-                                epgDataLoadedListener.onNoNetwork();
-                            }
-                            else {
-                                epgDataLoadedListener.onEpgDataLoadError(error.getMessage());
+                            if (epgDataLoadedListener != null) {
+                                if (error instanceof NoConnectionError) {
+                                    app.setErrorCode(NO_NETWORK_CONNECTION_ERROR);
+                                    epgDataLoadedListener.onNetworkError();
+                                }
+                                else if (error instanceof TimeoutError) {
+                                    app.setErrorCode(NETWORK_REQUEST_TIMEOUT_ERROR);
+                                    epgDataLoadedListener.onNetworkError();
+                                }
+                                else {
+                                    app.setErrorCode(NETWORK_REQUEST_FAILED_ERROR);
+                                    epgDataLoadedListener.onNetworkError();
+                                }
                             }
                         }
                     }
-                }
             );
 
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(

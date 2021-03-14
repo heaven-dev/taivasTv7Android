@@ -6,5 +6,5 @@ package fi.tv7.taivastv7.interfaces;
 public interface EpgDataLoadedListener {
     void onEpgDataLoaded();
     void onEpgDataLoadError(String message);
-    void onNoNetwork();
+    void onNetworkError();
 }

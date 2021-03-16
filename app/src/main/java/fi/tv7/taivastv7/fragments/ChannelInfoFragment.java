@@ -1,7 +1,5 @@
 package fi.tv7.taivastv7.fragments;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,16 +21,12 @@ import fi.tv7.taivastv7.helpers.Utils;
 import fi.tv7.taivastv7.model.SharedCacheViewModel;
 
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_MAIN_FRAGMENT;
-import static fi.tv7.taivastv7.helpers.Constants.LEFT_BRACKET;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
-import static fi.tv7.taivastv7.helpers.Constants.OS_VERSION;
-import static fi.tv7.taivastv7.helpers.Constants.RIGHT_BRACKET;
-import static fi.tv7.taivastv7.helpers.Constants.SPACE;
 
 /**
- * About fragment. Shows app and platform info.
+ * Channel info fragment. Shows app and platform info.
  */
-public class AboutFragment extends Fragment {
+public class ChannelInfoFragment extends Fragment {
 
     private View root = null;
     private List<TextView> menuTexts = null;
@@ -42,16 +36,16 @@ public class AboutFragment extends Fragment {
     /**
      * Default constructor.
      */
-    public AboutFragment() {
+    public ChannelInfoFragment() {
 
     }
 
     /**
-     * Creates and returns a new instance of this about fragment.
+     * Creates and returns a new instance of this channel info fragment.
      * @return
      */
-    public static AboutFragment newInstance() {
-        return new AboutFragment();
+    public static ChannelInfoFragment newInstance() {
+        return new ChannelInfoFragment();
     }
 
 
@@ -65,14 +59,14 @@ public class AboutFragment extends Fragment {
             super.onCreate(savedInstanceState);
 
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "AboutFragment.onCreate() called.");
+                Log.d(LOG_TAG, "ChannelInfoFragment.onCreate() called.");
             }
 
             sharedCacheViewModel = ViewModelProviders.of(requireActivity()).get(SharedCacheViewModel.class);
         }
         catch (Exception e) {
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "AboutFragment.onCreate(): Exception: " + e);
+                Log.d(LOG_TAG, "ChannelInfoFragment.onCreate(): Exception: " + e);
             }
             Utils.toErrorPage(getActivity());
         }
@@ -88,63 +82,21 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         try {
-            root = inflater.inflate(R.layout.fragment_about, container, false);
+            root = inflater.inflate(R.layout.fragment_channel_info, container, false);
 
-            RelativeLayout aboutContentContainer = root.findViewById(R.id.aboutContentContainer);
-            if (aboutContentContainer != null) {
-                Utils.fadePageAnimation(aboutContentContainer);
+            RelativeLayout channelInfoContentContainer = root.findViewById(R.id.channelInfoContentContainer);
+            if (channelInfoContentContainer != null) {
+                Utils.fadePageAnimation(channelInfoContentContainer);
             }
 
             menuTexts = Sidebar.getMenuTextItems(root);
-            Sidebar.setSelectedMenuItem(root, R.id.aboutMenuContainer);
+            Sidebar.setSelectedMenuItem(root, R.id.channelInfoMenuContainer);
 
-            Utils.requestFocusById(root, R.id.aboutContentContainer);
-
-            Context context = getContext();
-
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            String packageName = pInfo.packageName;
-            int versionCode = pInfo.versionCode;
-
-            TextView tv = root.findViewById(R.id.appPackage);
-            if (tv != null && packageName != null) {
-                tv.setText(packageName);
-            }
-
-            tv = root.findViewById(R.id.appVersion);
-            if (tv != null) {
-                tv.setText(String.valueOf(versionCode));
-            }
-
-            String osVersion = System.getProperty(OS_VERSION) + LEFT_BRACKET + android.os.Build.VERSION.INCREMENTAL + RIGHT_BRACKET;
-            int apiLevel = android.os.Build.VERSION.SDK_INT;
-            String device = android.os.Build.DEVICE;
-            String modelAndProduct = android.os.Build.MODEL + SPACE + LEFT_BRACKET + android.os.Build.PRODUCT + RIGHT_BRACKET;
-
-            tv = root.findViewById(R.id.osVersion);
-            if (tv != null && osVersion != null) {
-                tv.setText(osVersion);
-            }
-
-            tv = root.findViewById(R.id.apiLevel);
-            if (tv != null) {
-                tv.setText(String.valueOf(apiLevel));
-            }
-
-            tv = root.findViewById(R.id.device);
-            if (tv != null && device != null) {
-                tv.setText(device);
-            }
-
-            tv = root.findViewById(R.id.modelAndProduct);
-            if (tv != null && modelAndProduct != null) {
-                tv.setText(modelAndProduct);
-            }
-
+            Utils.requestFocusById(root, R.id.channelInfoContentContainer);
         }
         catch (Exception e) {
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "AboutFragment.onCreateView(): Exception: " + e);
+                Log.d(LOG_TAG, "ChannelInfoFragment.onCreateView(): Exception: " + e);
             }
             Utils.toErrorPage(getActivity());
         }
@@ -160,22 +112,21 @@ public class AboutFragment extends Fragment {
     public boolean onKeyDown(int keyCode, KeyEvent events) {
         try {
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "AboutFragment.onKeyDown(): keyCode: " + keyCode);
+                Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): keyCode: " + keyCode);
             }
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_DPAD_CENTER: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_DPAD_CENTER: keyCode: " + keyCode);
                 }
 
                 if (Sidebar.isSideMenuOpen(menuTexts)) {
                     int focusedMenu = Sidebar.getFocusedMenuItem(root);
-                    if (focusedMenu == R.id.aboutMenuContainer) {
+                    if (focusedMenu == R.id.channelInfoMenuContainer) {
                         this.focusOutFromSideMenu();
-                    }
-                    else {
+                    } else {
                         if (BuildConfig.DEBUG) {
-                            Log.d(LOG_TAG, "AboutFragment.onKeyDown(): Selected sidebar menu: " + focusedMenu);
+                            Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): Selected sidebar menu: " + focusedMenu);
                         }
 
                         Sidebar.menuItemSelected(focusedMenu, getActivity(), sharedCacheViewModel);
@@ -184,17 +135,17 @@ public class AboutFragment extends Fragment {
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_DPAD_LEFT: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_DPAD_LEFT: keyCode: " + keyCode);
                 }
 
                 if (!Sidebar.isSideMenuOpen(menuTexts)) {
                     Sidebar.showMenuTexts(menuTexts, root);
-                    Sidebar.setFocusToMenu(root, R.id.aboutMenuContainer);
+                    Sidebar.setFocusToMenu(root, R.id.channelInfoMenuContainer);
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_DPAD_RIGHT: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_DPAD_RIGHT: keyCode: " + keyCode);
                 }
 
                 if (Sidebar.isSideMenuOpen(menuTexts)) {
@@ -203,25 +154,25 @@ public class AboutFragment extends Fragment {
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_DPAD_DOWN: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_DPAD_DOWN: keyCode: " + keyCode);
                 }
 
                 if (Sidebar.isSideMenuOpen(menuTexts)) {
-                    Sidebar.menuFocusDown(root, R.id.aboutMenuContainer);
+                    Sidebar.menuFocusDown(root, R.id.channelInfoMenuContainer);
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_DPAD_UP: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_DPAD_UP: keyCode: " + keyCode);
                 }
 
                 if (Sidebar.isSideMenuOpen(menuTexts)) {
-                    Sidebar.menuFocusUp(root, R.id.aboutMenuContainer);
+                    Sidebar.menuFocusUp(root, R.id.channelInfoMenuContainer);
                 }
             }
             else if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (BuildConfig.DEBUG) {
-                    Log.d(LOG_TAG, "AboutFragment.onKeyDown(): KEYCODE_BACK: keyCode: " + keyCode);
+                    Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): KEYCODE_BACK: keyCode: " + keyCode);
                 }
 
                 if (Sidebar.isSideMenuOpen(menuTexts)) {
@@ -234,7 +185,7 @@ public class AboutFragment extends Fragment {
         }
         catch (Exception e) {
             if (BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "AboutFragment.onKeyDown(): Exception: " + e);
+                Log.d(LOG_TAG, "ChannelInfoFragment.onKeyDown(): Exception: " + e);
             }
             Utils.toErrorPage(getActivity());
         }
@@ -247,8 +198,8 @@ public class AboutFragment extends Fragment {
      */
     private void focusOutFromSideMenu() {
         Sidebar.hideMenuTexts(menuTexts, root);
-        Sidebar.setSelectedMenuItem(root, R.id.aboutMenuContainer);
+        Sidebar.setSelectedMenuItem(root, R.id.channelInfoMenuContainer);
 
-        Utils.requestFocusById(root, R.id.aboutContentContainer);
+        Utils.requestFocusById(root, R.id.channelInfoContentContainer);
     }
 }

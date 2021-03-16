@@ -23,6 +23,7 @@ import fi.tv7.taivastv7.fragments.AboutFragment;
 import fi.tv7.taivastv7.fragments.ArchiveMainFragment;
 import fi.tv7.taivastv7.fragments.ArchivePlayerFragment;
 import fi.tv7.taivastv7.fragments.CategoriesFragment;
+import fi.tv7.taivastv7.fragments.ChannelInfoFragment;
 import fi.tv7.taivastv7.fragments.ErrorFragment;
 import fi.tv7.taivastv7.fragments.ExitFragment;
 import fi.tv7.taivastv7.fragments.FavoritesFragment;
@@ -157,6 +158,10 @@ public class MainActivity extends AppCompatActivity implements EpgDataLoadedList
                 else if (fragment instanceof FavoritesFragment) {
                     // Favorites fragment visible
                     return ((FavoritesFragment) fragment).onKeyDown(keyCode, events);
+                }
+                else if (fragment instanceof ChannelInfoFragment) {
+                    // Channel info fragment visible
+                    return ((ChannelInfoFragment) fragment).onKeyDown(keyCode, events);
                 }
                 else if (fragment instanceof AboutFragment) {
                     // About fragment visible

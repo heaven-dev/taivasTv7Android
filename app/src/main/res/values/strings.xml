@@ -21,6 +21,7 @@
     <string name="guide">TV-opas</string>
     <string name="search">Haku</string>
     <string name="favorites">Suosikit</string>
+    <string name="channel_info">Taivas TV7</string>
     <string name="about">Tietoja</string>
 
     <string name="we_recommend">Suosittelemme</string>
@@ -57,4 +58,23 @@
     <string name="network_request_failed">Network request failed :-(</string>
     <string name="network_request_timeout">Network request timeout :-(</string>
     <string name="close">Close</string>
+
+    <string name="title_1">Näin syntyi TV7</string>
+    <string name="title_1_chapter_1">Taivas TV7 syntyi vuonna 2003, kun kanavan toimitusjohtaja Martti Ojares koki saaneensa kutsun Jumalalta perustaa Suomeen ensimmäinen kristillinen tv-kanava.</string>
+    <string name="title_1_chapter_2">Ojares oli juuri jäänyt eläkkeelle työstään Sanoma Oy:n varatoimitusjohtaja ja suunnitteli leppoisia eläkevuosia vaimonsa Mirja Ojareksen kanssa. Martti kuitenkin huomasi usein ajattelevansa sitä, kuinka yhteiskunta oli ajautumassa yhä kauemmas kristillisistä arvoista. Hänellä oli niin voimakas sisäinen tarve kertoa evankeliumin sanoma kaikille suomalaisille, ettei hän voinut kulkea kutsunsa ohi. Paras väline olisi tv-kanava, jossa esitettäisiin avoimesti kristillisiä ohjelmia ja joka näkyisi jokaisessa suomalaisessa kodissa. Martti kiteytti suunnitelmansa MTV3:n pääuutislähetyksessä toteamalla: ”TV7 on kanava, jossa Jeesus Kristus on Herra.”</string>
+    <string name="title_1_chapter_3">Ensimmäinen ohjelma, kahden tunnin suora lähetys, käynnistyi 15.12.2003 klo 18. Ohjelman jälkeen esitettiin ensimmäinen osa kolmiosaisesta, vuonna 1979 ilmestyneestä elokuvasta Jeesus. Jo toisena iltana kiitollinen äiti kertoi Ojaresten pariskunnalle, että hänen poikansa oli löytänyt Jumalan katsoessaan Jeesus-elokuvaa. Vaikka kulunut vuosi kanavaa valmistellessa oli vaatinut monta uskonaskelta, sinä iltana toteutui Martin näky kristillisen kanavan tarpeellisuudesta.</string>
+    <string name="title_1_chapter_4">Sittemmin tuhannet ihmiset ovat kertoneet uskoontuloista, parantumisista, rukousvastauksista ja rohkaisun sanoista, joita he ovat löytäneet TV7:n ohjelmien kautta. Vuosien jälkeen kanavan näky on edelleen sama: viedä ilosanoma Jumalan armosta ja Jeesuksen ristinkuolemasta kaikkialle maailmaan. Suomen lisäksi kanava on laajentunut myös naapurimaihin.</string>
+    <string name="title_1_chapter_5">Ensimmäinen rinnakkaiskanava, vironkielinen Taevas TV7 perustettiin vuonna 2009. Kanava näkyy internetissä sekä Viron kaapelitalouksissa. Vuonna 2013 perustettu ruotsinkielinen Himlen TV7 näkyy internetissä, Apple TV:n ja Chromecastin kautta sekä kaapeli- ja IPTV-verkoissa Suomen ruotsinkielisillä alueilla. Venäjänkielinen Nebesa TV7 perustettiin loppuvuodesta 2016 ja se näkyy internetissä. Suomenkielisen Taivas TV7:n rinnalla on lisäksi suomenkielinen nettikanava TV7 Plus, joka on erikoistunut nuorten ohjelmiin ja suoriin lähetyksiin. Se perustettiin vuonna 2012.</string>
+    <string name="title_1_chapter_6">TV7:llä on Jerusalemissa ulkomaantoimitus, joka tuottaa päivittäistä TV7 Israel News -uutislähetystä sekä Jerusalem studio -ajankohtaisohjelmaa. Ukrainan Poltavassa sijaitsevassa äänitysstudiossa käännetään ja äänitetään TV7:n ohjelmia venäjän kielelle.</string>
+
+    <string name="title_2">Miksi TV7-kanava on olemassa?</string>
+    <string name="title_2_chapter_1">Kanava toteuttaa Jeesuksen antamaa lähetyskäskyä (Matt. 28:16-20) viedä ilosanoma kaikkeen maailmaan. Taivas TV7:n toiminnan perustana on Jumalan sana. Kanava sitoutuu Apostoliseen uskontunnustukseen.</string>
+    <string name="title_2_chapter_2">Kanavan talous perustuu kristilliseettisesti kestävään taloudenhoitoon (2. Moos. 20:2-17).</string>
+    <string name="title_2_chapter_3">Kanavan tavoitteena on myös saattaa yhteen kristillisen kentän toimijoita. Eri kristillisistä yhteisöistä tulevat kristityt voivat oppia toisiltaan ja löytää vahvemman yhteyden keskenään (Matt. 22:36-40).</string>
+
+    <string name="title_3">Miten TV-ohjelmat valitaan?</string>
+    <string name="title_3_chapter_1">TV7:n ohjelmistosta päättää viikoittain kokoontuva ohjelmatiimi. Siihen kuuluvat TV7:n toimitusjohtaja ja toiminnanjohtaja sekä kanavan tuottajia ja toimittajia. Ohjelmiston sisällöstä vastaa kanavan toimitusjohtaja.</string>
+    <string name="title_3_chapter_2">TV7 pyrkii esittämään monipuolista ja kansainvälistä kristillistä sisältöä. Ohjelmisto koostuu mm. lastenohjelmista, henkilökohtaisista todistuksista, elokuvista, haastatteluista, opetusohjelmista, musiikista, ajankohtaisohjelmista ja suorista esirukousohjelmista.</string>
+
+    <string name="copyright">Copyright Taivas TV7. Unauthorized publication of programs or subtitles is prohibited.</string>
 </resources>

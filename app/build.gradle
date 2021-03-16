@@ -8,8 +8,8 @@ android {
         applicationId "fi.tv7.taivastv7"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 9
-        versionName "0.0.9"
+        versionCode 10
+        versionName "0.0.10"
 
     }
 

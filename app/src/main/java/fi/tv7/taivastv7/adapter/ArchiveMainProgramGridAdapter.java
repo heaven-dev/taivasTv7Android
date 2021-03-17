@@ -21,7 +21,9 @@ import fi.tv7.taivastv7.helpers.Utils;
 
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.DURATION;
+import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
+import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
 
 /**
@@ -78,11 +80,11 @@ public class ArchiveMainProgramGridAdapter extends RecyclerView.Adapter<ArchiveM
             JSONObject obj = elements.getJSONObject(position);
             if (obj != null) {
                 String imagePath = Utils.getValue(obj, IMAGE_PATH);
-                if (imagePath != null) {
+                if (imagePath != null && !imagePath.equals(EMPTY) && !imagePath.equals(NULL_VALUE)) {
                     Glide.with(context).asBitmap().load(imagePath).into(holder.programImage);
                 }
                 else {
-                    Glide.with(context).asBitmap().load(R.drawable.tv7_app_icon).into(holder.programImage);
+                    Glide.with(context).asBitmap().load(R.drawable.fallback).into(holder.programImage);
                 }
 
                 String dateTime = Utils.getValue(obj, BROADCAST_DATE_TIME);

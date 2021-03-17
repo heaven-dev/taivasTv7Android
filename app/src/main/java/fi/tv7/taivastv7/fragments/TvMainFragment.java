@@ -45,6 +45,7 @@ import static fi.tv7.taivastv7.helpers.Constants.GUIDE_TIMER_TIMEOUT;
 import static fi.tv7.taivastv7.helpers.Constants.HTTP;
 import static fi.tv7.taivastv7.helpers.Constants.HTTPS;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
+import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.PIPE_WITH_SPACES;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_LIST_MIN_SIZE;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_VISIBLE_IMAGE_COUNT;
@@ -247,12 +248,12 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
     }
 
     /**
-     * Network error callback.
+     * Archive data load network error response.
      */
     @Override
     public void onNetworkError() {
         if (BuildConfig.DEBUG) {
-            Log.d(LOG_TAG, "MainActivity.onNetworkError(): ***Network error!***");
+            Log.d(LOG_TAG, "TvMainFragment.onNetworkError(): ***Network error!***");
         }
 
         Utils.toErrorPage(getActivity());
@@ -310,9 +311,14 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
 
                     String imageUrl = epgItem.getIcon();
 
-                    // Change scheme from http to https
-                    if (imageUrl != null && !imageUrl.startsWith(HTTPS)) {
-                        imageUrl = imageUrl.replace(HTTP, HTTPS);
+                    if (imageUrl != null && !imageUrl.equals(EMPTY) && !imageUrl.equals(NULL_VALUE)) {
+                        // Change scheme from http to https
+                        if (!imageUrl.startsWith(HTTPS)) {
+                            imageUrl = imageUrl.replace(HTTP, HTTPS);
+                        }
+                    }
+                    else {
+                        imageUrl = null;
                     }
 
                     if (index == 0) {
@@ -349,7 +355,12 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
 
             ImageView tvImage = root.findViewById(R.id.tvImage);
             if (tvImage != null) {
-                Glide.with(this).asBitmap().load(icon).into(tvImage);
+                if (icon != null) {
+                    Glide.with(this).asBitmap().load(icon).into(tvImage);
+                }
+                else {
+                    Glide.with(this).asBitmap().load(R.drawable.fallback).into(tvImage);
+                }
             }
 
             TextView tvText = root.findViewById(R.id.tvText);
@@ -386,7 +397,12 @@ public class TvMainFragment extends Fragment implements EpgDataLoadedListener, F
             if (cpi != null) {
                 ImageView imageView = root.findViewById(cpi.getImageId());
                 if (imageView != null) {
-                    Glide.with(this).asBitmap().load(icon).into(imageView);
+                    if (icon != null) {
+                        Glide.with(this).asBitmap().load(icon).into(imageView);
+                    }
+                    else {
+                        Glide.with(this).asBitmap().load(R.drawable.fallback).into(imageView);
+                    }
                 }
 
                 TextView textView = root.findViewById(cpi.getTextId());

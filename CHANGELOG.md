@@ -1,3 +1,14 @@
+# 17.03.2021 09:33
+
+### Bug Fixes
+
+* Fallback image changed and it was missing in some fragments.
+
+### Features
+
+* Version 11.
+
+
 # 16.03.2021 08:34
 
 ### Bug Fixes

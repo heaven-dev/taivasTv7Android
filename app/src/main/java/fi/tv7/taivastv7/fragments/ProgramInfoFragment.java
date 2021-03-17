@@ -39,6 +39,7 @@ import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
 import static fi.tv7.taivastv7.helpers.Constants.COLON_WITH_SPACE;
 import static fi.tv7.taivastv7.helpers.Constants.DURATION;
+import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.EPISODE_NUMBER;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_DEFAULT;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_TAG;
@@ -51,6 +52,7 @@ import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.IS_VISIBLE_ON_VOD;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.NEGATIVE_ONE_STR;
+import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.ONE_STR;
 import static fi.tv7.taivastv7.helpers.Constants.PERCENT;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
@@ -149,11 +151,11 @@ public class ProgramInfoFragment extends Fragment {
             backgroundImage = root.findViewById(R.id.backgroundImage);
             if (backgroundImage != null) {
                 String imagePath = Utils.getValue(selectedProgram, IMAGE_PATH);
-                if (imagePath != null) {
+                if (imagePath != null && !imagePath.equals(EMPTY) && !imagePath.equals(NULL_VALUE)) {
                     Glide.with(this).asBitmap().load(imagePath).into(backgroundImage);
                 }
                 else {
-                    Glide.with(this).asBitmap().load(R.drawable.tv7_app_icon).into(backgroundImage);
+                    Glide.with(this).asBitmap().load(R.drawable.fallback).into(backgroundImage);
                 }
             }
 

@@ -24,6 +24,7 @@ import fi.tv7.taivastv7.helpers.Utils;
 
 import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
 import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
+import static fi.tv7.taivastv7.helpers.Constants.ID_NULL;
 import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.ONE_STR;
@@ -110,7 +111,7 @@ public class GuideGridAdapter extends RecyclerView.Adapter<GuideGridAdapter.Simp
                 holder.ongoingProgram.setVisibility(View.GONE);
 
                 String value = Utils.getValue(obj, IMAGE_PATH);
-                if (value != null && !value.equals(EMPTY) && !value.equals(NULL_VALUE)) {
+                if (value != null && !value.equals(EMPTY) && !value.equals(NULL_VALUE) && !value.contains(ID_NULL)) {
                     Glide.with(context).asBitmap().load(value).into(holder.guideImage);
                 }
                 else {

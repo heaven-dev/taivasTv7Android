@@ -25,6 +25,7 @@ import static fi.tv7.taivastv7.helpers.Constants.COLON_WITH_SPACE;
 import static fi.tv7.taivastv7.helpers.Constants.DURATION;
 import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.EPISODE_NUMBER;
+import static fi.tv7.taivastv7.helpers.Constants.ID_NULL;
 import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
@@ -115,7 +116,7 @@ public class SeriesGridAdapter extends RecyclerView.Adapter<SeriesGridAdapter.Si
             if (obj != null) {
 
                 String value = Utils.getValue(obj, IMAGE_PATH);
-                if (value != null && !value.equals(EMPTY) && !value.equals(NULL_VALUE)) {
+                if (value != null && !value.equals(EMPTY) && !value.equals(NULL_VALUE) && !value.contains(ID_NULL)) {
                     Glide.with(context).asBitmap().load(value).into(holder.seriesImage);
                 }
                 else {

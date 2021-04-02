@@ -1,9 +1,16 @@
+# 01.04.2021 15:56
+
+### Bug Fixes
+
+* Sidebar menu absolute positioning.
+* Version 12.
+
+
 # 01.04.2021 12:46
 
 ### Bug Fixes
 
 * Added id=null check to image URLs.
-* Version 12.
 
 
 # 17.03.2021 09:33

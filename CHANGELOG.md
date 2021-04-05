@@ -9,13 +9,6 @@
 * Version 12.
 
 
-# 01.04.2021 12:46
-
-### Bug Fixes
-
-* Added id=null check to image URLs.
-
-
 # 17.03.2021 09:33
 
 ### Bug Fixes

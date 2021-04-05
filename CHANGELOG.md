@@ -1,7 +1,10 @@
 # 01.04.2021 15:56
 
 ### Bug Fixes
+* none
 
+### Features
+* Added possibility to open another video on archive player during playback.
 * Sidebar menu absolute positioning.
 * Version 12.
 

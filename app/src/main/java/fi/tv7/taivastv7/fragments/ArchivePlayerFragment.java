@@ -96,6 +96,7 @@ import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
 import static fi.tv7.taivastv7.helpers.Constants.SLASH_WITH_SPACES;
 import static fi.tv7.taivastv7.helpers.Constants.STREAM_ERROR_RETRY_DELAY;
 import static fi.tv7.taivastv7.helpers.Constants.SUBTITLES_URL;
+import static fi.tv7.taivastv7.helpers.Constants.SUBTITLE_BACKGROUND;
 import static fi.tv7.taivastv7.helpers.Constants.TRANSLATION_LANG_ID;
 import static fi.tv7.taivastv7.helpers.Constants.TRANSLATION_METHOD;
 import static fi.tv7.taivastv7.helpers.Constants.TV_BRAND;
@@ -318,10 +319,9 @@ public class ArchivePlayerFragment extends Fragment implements Player.EventListe
 
                 SubtitleView subtitleView = playerView.getSubtitleView();
                 if (subtitleView != null) {
-                    CaptionStyleCompat captionStyleCompat = new CaptionStyleCompat(Color.WHITE, Color.BLACK,
+                    CaptionStyleCompat captionStyleCompat = new CaptionStyleCompat(Color.WHITE, SUBTITLE_BACKGROUND,
                             Color.TRANSPARENT, CaptionStyleCompat.EDGE_TYPE_NONE, Color.TRANSPARENT, Typeface.DEFAULT);
                     subtitleView.setStyle(captionStyleCompat);
-                    subtitleView.setAlpha(0.8f);
 
                     exoPlayer.addTextOutput(new TextOutput() {
                         @Override

@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.VerticalGridView;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -175,8 +177,18 @@ public class SeriesFragment extends Fragment implements ArchiveDataLoadedListene
                 this.addTitleText(jsonArray.getJSONObject(0));
 
                 seriesScroll = root.findViewById(R.id.seriesScroll);
-                seriesGridAdapter = new SeriesGridAdapter(getActivity(), getContext(), jsonArray);
+                seriesScroll.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        if (seriesScroll != null) {
+                            seriesScroll.invalidate();
+                            seriesScroll.requestLayout();
+                        }
+                    }
+                });
 
+                seriesGridAdapter = new SeriesGridAdapter(getActivity(), getContext(), jsonArray);
                 seriesScroll.setAdapter(seriesGridAdapter);
             }
             else {

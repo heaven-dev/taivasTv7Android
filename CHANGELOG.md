@@ -1,3 +1,13 @@
+# 17.04.2021 13:56
+
+### Bug Fixes
+* Fixed grid views refresh bug.
+* New version 13.
+
+### Features
+* none
+
+
 # 12.04.2021 10:14
 
 ### Bug Fixes

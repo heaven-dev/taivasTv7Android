@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.VerticalGridView;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -158,6 +160,17 @@ public class SearchResultFragment extends Fragment implements ArchiveDataLoadedL
             }
 
             searchResultScroll = root.findViewById(R.id.searchResultScroll);
+            searchResultScroll.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (searchResultScroll != null) {
+                        searchResultScroll.invalidate();
+                        searchResultScroll.requestLayout();
+                    }
+                }
+            });
+
             searchResultGridAdapter = new SearchResultGridAdapter(getActivity(), getContext(), jsonArray);
             searchResultScroll.setAdapter(searchResultGridAdapter);
 

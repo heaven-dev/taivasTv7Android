@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.VerticalGridView;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -175,8 +177,18 @@ public class CategoriesFragment extends Fragment implements ArchiveDataLoadedLis
             if (dataLength == 0) {
                 // first load
                 categoriesScroll = root.findViewById(R.id.categoriesScroll);
-                categoryGridAdapter = new CategoryGridAdapter(getActivity(), getContext(), jsonArray);
+                categoriesScroll.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        if (categoriesScroll != null) {
+                            categoriesScroll.invalidate();
+                            categoriesScroll.requestLayout();
+                        }
+                    }
+                });
 
+                categoryGridAdapter = new CategoryGridAdapter(getActivity(), getContext(), jsonArray);
                 categoriesScroll.setAdapter(categoryGridAdapter);
             }
             else {

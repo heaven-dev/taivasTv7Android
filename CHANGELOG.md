@@ -1,3 +1,13 @@
+# 25.04.2021 13:21
+
+### Bug Fixes
+* none
+
+### Features
+* Changes to screen saver enable/disable functionality.
+* New version 14.
+
+
 # 20.04.2021 09:56
 
 ### Bug Fixes

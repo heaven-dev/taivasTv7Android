@@ -1,3 +1,12 @@
+# 26.04.2021 15:19
+
+### Bug Fixes
+* Fixed remote home screen button related bug to archive player fragment.
+
+### Features
+* New version 15.
+
+
 # 25.04.2021 13:21
 
 ### Bug Fixes

@@ -1,8 +1,9 @@
-# 29.05.2021 15:22
+# 30.05.2021 19:33
 
 ### Bug Fixes
 * Fixed program title bug on search result page.
 * Added app build timestamp to the info page of app.
+* Fixed exit fragment bug.
 
 ### Features
 * New version 17.

@@ -32,9 +32,9 @@
         android:configChanges="keyboard|keyboardHidden|navigation"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:versionCode="17"
-        android:versionName="1.0.1"
-        android:minSdkVersion="23"
+        android:versionCode="18"
+        android:versionName="1.0.2"
+        android:minSdkVersion="22"
         android:targetSdkVersion="29">
         <activity
             android:name="fi.tv7.taivastv7.activities.MainActivity"

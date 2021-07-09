@@ -48,6 +48,8 @@ import static fi.tv7.taivastv7.helpers.Constants.END_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.EPISODE_NUMBER;
 import static fi.tv7.taivastv7.helpers.Constants.EQUAL;
 import static fi.tv7.taivastv7.helpers.Constants.FIRST_BROADCAST;
+import static fi.tv7.taivastv7.helpers.Constants.FORMATTED_END_TIME;
+import static fi.tv7.taivastv7.helpers.Constants.FORMATTED_START_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.GET_;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_DATA;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_DATE_METHOD;
@@ -860,10 +862,15 @@ public class ArchiveViewModel extends ViewModel {
                 ongoingProgramIndex = i;
             }
 
+            setValue(respObj, TIME, start, false);
+            setValue(respObj, END_TIME, end, false);
+
             // Start and end time (hh:mm - hh:mm)
             String startTime = this.createLocalTimeString(start);
             String endTime = this.createLocalTimeString(end);
 
+            setValue(respObj, FORMATTED_START_TIME, startTime, false);
+            setValue(respObj, FORMATTED_END_TIME, endTime, false);
             setValue(respObj, START_END_TIME, startTime + DASH_WITH_SPACES + endTime, false);
 
             // Start and end date (dd.mm.yyyy)
@@ -879,6 +886,10 @@ public class ArchiveViewModel extends ViewModel {
             String duration = String.valueOf(Long.parseLong(end) - Long.parseLong(start));
             setValue(respObj, DURATION, Utils.getTimeStampByDurationMs(duration), false);
 
+            setValue(respObj, SERIES, this.getValue(sourceObj, SERIES), false);
+            setValue(respObj, NAME, this.getValue(sourceObj, NAME), false);
+
+            setValue(respObj, SID, this.getValue(sourceObj, SID), true);
             setValue(respObj, EPISODE_NUMBER, this.getValue(sourceObj, EPISODE_NUMBER), true);
 
             String isVisibleOnVod = this.getValue(sourceObj, IS_VISIBLE_ON_VOD);

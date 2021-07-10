@@ -87,7 +87,7 @@ public class NewestProgramsGridAdapter extends RecyclerView.Adapter<NewestProgra
         try {
             JSONObject obj = elements.getJSONObject(position);
             if (obj != null) {
-                String imagePath = Utils.getValue(obj, IMAGE_PATH);
+                String imagePath = Utils.getJsonStringValue(obj, IMAGE_PATH);
                 if (imagePath != null && !imagePath.equals(EMPTY) && !imagePath.equals(NULL_VALUE) && !imagePath.contains(ID_NULL)) {
                     Glide.with(context).asBitmap().load(imagePath).into(holder.programImage);
                 }
@@ -95,17 +95,17 @@ public class NewestProgramsGridAdapter extends RecyclerView.Adapter<NewestProgra
                     Glide.with(context).asBitmap().load(R.drawable.fallback).into(holder.programImage);
                 }
 
-                String dateTime = Utils.getValue(obj, BROADCAST_DATE_TIME);
+                String dateTime = Utils.getJsonStringValue(obj, BROADCAST_DATE_TIME);
                 if (dateTime != null) {
                     holder.programDateTimeText.setText(dateTime);
                 }
 
-                String duration = Utils.getValue(obj, DURATION);
+                String duration = Utils.getJsonStringValue(obj, DURATION);
                 if (duration != null) {
                     holder.programDurationText.setText(duration);
                 }
 
-                String seriesAndName = Utils.getValue(obj, SERIES_AND_NAME);
+                String seriesAndName = Utils.getJsonStringValue(obj, SERIES_AND_NAME);
                 if (seriesAndName != null) {
                     holder.programText.setText(seriesAndName);
                 }

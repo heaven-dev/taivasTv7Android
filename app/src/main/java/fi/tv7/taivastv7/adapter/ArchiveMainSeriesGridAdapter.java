@@ -19,59 +19,59 @@ import org.json.JSONObject;
 import fi.tv7.taivastv7.R;
 import fi.tv7.taivastv7.helpers.Utils;
 
-import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.DURATION;
 import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.ID_NULL;
 import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
+import static fi.tv7.taivastv7.helpers.Constants.START_DATE;
 
 /**
- * Grid adapter for archive main programs.
+ * Grid adapter for archive main series.
  */
-public class ArchiveMainProgramGridAdapter extends RecyclerView.Adapter<ArchiveMainProgramGridAdapter.SimpleViewHolder> {
+public class ArchiveMainSeriesGridAdapter extends RecyclerView.Adapter<ArchiveMainSeriesGridAdapter.SimpleViewHolder> {
 
     private FragmentActivity activity = null;
     private Context context = null;
     private JSONArray elements = null;
 
-    public ArchiveMainProgramGridAdapter(FragmentActivity activity, Context context, JSONArray jsonArray) {
+    public ArchiveMainSeriesGridAdapter(FragmentActivity activity, Context context, JSONArray series) {
         this.activity = activity;
         this.context = context;
-        this.elements = jsonArray;
+        this.elements = series;
     }
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout programContainer = null;
-        public ImageView programImage = null;
-        public TextView programText = null;
-        public TextView programDateTimeText = null;
-        public TextView programDurationText = null;
+        public RelativeLayout seriesContainer = null;
+        public ImageView seriesImage = null;
+        public TextView seriesText = null;
+        public TextView seriesDateText = null;
+        public TextView seriesDurationText = null;
 
         public SimpleViewHolder(View view) {
             super(view);
 
-            programContainer = view.findViewById(R.id.mainArchiveProgramContainer);
-            programImage = view.findViewById(R.id.mainArchiveProgramImage);
-            programText = view.findViewById(R.id.mainArchiveProgramText);
-            programDateTimeText = view.findViewById(R.id.mainArchiveProgramDateTime);
-            programDurationText = view.findViewById(R.id.mainArchiveProgramDuration);
+            seriesContainer = view.findViewById(R.id.mainArchiveSeriesContainer);
+            seriesImage = view.findViewById(R.id.mainArchiveSeriesImage);
+            seriesText = view.findViewById(R.id.mainArchiveSeriesText);
+            seriesDateText = view.findViewById(R.id.mainArchiveSeriesDate);
+            seriesDurationText = view.findViewById(R.id.mainArchiveSeriesDuration);
 
             // Calculate and set item width
             int itemWidth = Utils.dpToPx(calculateItemWidth());
 
-            if (programContainer != null) {
-                ViewGroup.LayoutParams params = programContainer.getLayoutParams();
+            if (seriesContainer != null) {
+                ViewGroup.LayoutParams params = seriesContainer.getLayoutParams();
                 params.width = itemWidth;
-                programContainer.setLayoutParams(params);
+                seriesContainer.setLayoutParams(params);
             }
         }
     }
 
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(context).inflate(R.layout.archive_main_grid_program_element, parent, false);
+        final View view = LayoutInflater.from(context).inflate(R.layout.archive_main_grid_series_element, parent, false);
         return new SimpleViewHolder(view);
     }
 
@@ -82,25 +82,25 @@ public class ArchiveMainProgramGridAdapter extends RecyclerView.Adapter<ArchiveM
             if (obj != null) {
                 String imagePath = Utils.getJsonStringValue(obj, IMAGE_PATH);
                 if (imagePath != null && !imagePath.equals(EMPTY) && !imagePath.equals(NULL_VALUE) && !imagePath.contains(ID_NULL)) {
-                    Glide.with(context).asBitmap().load(imagePath).into(holder.programImage);
+                    Glide.with(context).asBitmap().load(imagePath).into(holder.seriesImage);
                 }
                 else {
-                    Glide.with(context).asBitmap().load(R.drawable.fallback).into(holder.programImage);
+                    Glide.with(context).asBitmap().load(R.drawable.fallback).into(holder.seriesImage);
                 }
 
-                String dateTime = Utils.getJsonStringValue(obj, BROADCAST_DATE_TIME);
-                if (dateTime != null) {
-                    holder.programDateTimeText.setText(dateTime);
+                String startDate = Utils.getJsonStringValue(obj, START_DATE);
+                if (startDate != null) {
+                    holder.seriesDateText.setText(startDate);
                 }
 
                 String duration = Utils.getJsonStringValue(obj, DURATION);
                 if (duration != null) {
-                    holder.programDurationText.setText(duration);
+                    holder.seriesDurationText.setText(duration);
                 }
 
                 String seriesAndName = Utils.getJsonStringValue(obj, SERIES_AND_NAME);
                 if (seriesAndName != null) {
-                    holder.programText.setText(seriesAndName);
+                    holder.seriesText.setText(seriesAndName);
                 }
             }
         }

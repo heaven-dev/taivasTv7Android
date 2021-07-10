@@ -43,6 +43,7 @@ import fi.tv7.taivastv7.fragments.ProgramInfoFragment;
 import fi.tv7.taivastv7.fragments.SearchFragment;
 import fi.tv7.taivastv7.fragments.SearchResultFragment;
 import fi.tv7.taivastv7.fragments.SeriesFragment;
+import fi.tv7.taivastv7.fragments.SeriesInfoFragment;
 import fi.tv7.taivastv7.fragments.TvMainFragment;
 import fi.tv7.taivastv7.fragments.TvPlayerFragment;
 
@@ -54,7 +55,6 @@ import static fi.tv7.taivastv7.helpers.Constants.CHANNEL_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.COLON;
 import static fi.tv7.taivastv7.helpers.Constants.DASH;
 import static fi.tv7.taivastv7.helpers.Constants.DOT;
-import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.ERROR_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_DURATION;
@@ -71,6 +71,7 @@ import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_RESULT_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.SERIES_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SHOW_ANIMATIONS;
 import static fi.tv7.taivastv7.helpers.Constants.TIME_STAMP_FORMAT;
 import static fi.tv7.taivastv7.helpers.Constants.TV_MAIN_FRAGMENT;
@@ -186,6 +187,9 @@ public abstract class Utils {
                 else if (page.equals(PROGRAM_INFO_FRAGMENT)) {
                     fragment = ProgramInfoFragment.newInstance();
                 }
+                else if (page.equals(SERIES_INFO_FRAGMENT)) {
+                    fragment = SeriesInfoFragment.newInstance();
+                }
                 else if (page.equals(CATEGORIES_FRAGMENT)) {
                     fragment = CategoriesFragment.newInstance();
                 }
@@ -296,10 +300,17 @@ public abstract class Utils {
         return calendar.getTimeInMillis();
     }
 
-    public static String getValue(JSONObject obj, String key) throws Exception {
+    public static Integer getJsonIntValue(JSONObject obj, String key) throws Exception {
+        if (obj != null && key != null && obj.has(key)) {
+            return obj.getInt(key);
+        }
+        return null;
+    }
+
+    public static String getJsonStringValue(JSONObject obj, String key) throws Exception {
         if (obj != null && key != null && obj.has(key)) {
             String value = obj.getString(key);
-            if (value != null && !value.equals(NULL_VALUE)) {
+            if (!value.equals(NULL_VALUE)) {
                 return value;
             }
             return null;
@@ -374,30 +385,6 @@ public abstract class Utils {
         return Long.parseLong(value);
     }
 
-    public static String getJsonStringValue(JSONObject obj, String key) {
-        try {
-            if (obj != null && key != null) {
-                return obj.getString(key);
-            }
-        }
-        catch (Exception e) {
-            return EMPTY;
-        }
-        return EMPTY;
-    }
-
-    public static Integer getJsonIntValue(JSONObject obj, String key) {
-        try {
-            if (obj != null && key != null) {
-                return obj.getInt(key);
-            }
-        }
-        catch (Exception e) {
-            return null;
-        }
-        return null;
-    }
-
     public static JSONArray getSavedPrefs(String tag, String defaultValue, Context context) throws Exception {
         JSONArray jsonArray = null;
 
@@ -440,7 +427,7 @@ public abstract class Utils {
         }
     }
 
-    public static int isProgramInFavorites(Context context, String programId) throws Exception {
+    public static int isItemInFavorites(Context context, String id, String key) throws Exception {
         int notFound = -1;
 
         if (context != null) {
@@ -458,12 +445,12 @@ public abstract class Utils {
                         continue;
                     }
 
-                    String id = Utils.getValue(obj, ID);
-                    if (id == null) {
+                    String value = Utils.getJsonStringValue(obj, key);
+                    if (value == null) {
                         continue;
                     }
 
-                    if (id.equals(programId)) {
+                    if (value.equals(id)) {
                         return i;
                     }
                 }
@@ -484,7 +471,7 @@ public abstract class Utils {
                     continue;
                 }
 
-                String value = getValue(obj, ID);
+                String value = getJsonStringValue(obj, ID);
                 if (value == null) {
                     continue;
                 }

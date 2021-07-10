@@ -1,3 +1,16 @@
+# 10.07.2021 14:24
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Added series programs to the archive main page.
+* Added series page which can be used to add/remove series to favorites.
+* New version number 21.
+
+
 # 09.07.2021 12:00
 
 ### Bug Fixes

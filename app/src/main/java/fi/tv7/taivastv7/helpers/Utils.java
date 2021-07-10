@@ -65,14 +65,17 @@ import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_DEFAULT;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ID;
+import static fi.tv7.taivastv7.helpers.Constants.IS_SERIES;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
+import static fi.tv7.taivastv7.helpers.Constants.ONE_STR;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_RESULT_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SHOW_ANIMATIONS;
+import static fi.tv7.taivastv7.helpers.Constants.SID;
 import static fi.tv7.taivastv7.helpers.Constants.TIME_STAMP_FORMAT;
 import static fi.tv7.taivastv7.helpers.Constants.TV_MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.TV_PLAYER_FRAGMENT;
@@ -450,8 +453,16 @@ public abstract class Utils {
                         continue;
                     }
 
-                    if (value.equals(id)) {
-                        return i;
+                    if (key.equals(SID)) {
+                        String series = Utils.getJsonStringValue(obj, IS_SERIES);
+                        if (series != null && series.equals(ONE_STR) && value.equals(id)) {
+                            return i;
+                        }
+                    }
+                    else {
+                        if (value.equals(id)) {
+                            return i;
+                        }
                     }
                 }
             }

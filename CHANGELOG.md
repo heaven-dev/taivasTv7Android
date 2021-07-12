@@ -1,3 +1,15 @@
+# 12.07.2021 17:47
+
+### Bug Fixes
+
+* none
+
+### Features
+
+* Configuration clear functionality added to the information page.
+* New version number 22.
+
+
 # 10.07.2021 16:22
 
 ### Bug Fixes

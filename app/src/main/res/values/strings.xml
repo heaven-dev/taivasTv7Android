@@ -63,6 +63,15 @@
     <string name="network_request_timeout">Network request timeout :-(</string>
     <string name="restart">Restart</string>
     <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="delete_configurations">Delete configurations</string>
+    <string name="video_status">Video status</string>
+    <string name="favorites_eng">Favorites</string>
+    <string name="search_history">Search history</string>
+    <string name="items">items</string>
+    <string name="delete_configuration_question">Delete configuration?</string>
 
     <string name="title_1">Näin syntyi TV7</string>
     <string name="title_1_chapter_1">Taivas TV7 syntyi vuonna 2003, kun kanavan toimitusjohtaja Martti Ojares koki saaneensa kutsun Jumalalta perustaa Suomeen ensimmäinen kristillinen tv-kanava.</string>

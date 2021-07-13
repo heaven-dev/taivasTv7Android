@@ -50,11 +50,18 @@ import fi.tv7.taivastv7.fragments.TvPlayerFragment;
 import static fi.tv7.taivastv7.helpers.Constants.ABOUT_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_PLAYER_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE;
+import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
+import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
 import static fi.tv7.taivastv7.helpers.Constants.CATEGORIES_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.CHANNEL_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.COLON;
 import static fi.tv7.taivastv7.helpers.Constants.DASH;
 import static fi.tv7.taivastv7.helpers.Constants.DOT;
+import static fi.tv7.taivastv7.helpers.Constants.DURATION;
+import static fi.tv7.taivastv7.helpers.Constants.END_DATE;
+import static fi.tv7.taivastv7.helpers.Constants.END_TIME;
+import static fi.tv7.taivastv7.helpers.Constants.EPISODE_NUMBER;
 import static fi.tv7.taivastv7.helpers.Constants.ERROR_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_DURATION;
@@ -63,19 +70,29 @@ import static fi.tv7.taivastv7.helpers.Constants.FADE_IN_ANIMATION_START;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_DEFAULT;
 import static fi.tv7.taivastv7.helpers.Constants.FAVORITES_SP_TAG;
+import static fi.tv7.taivastv7.helpers.Constants.FORMATTED_END_TIME;
+import static fi.tv7.taivastv7.helpers.Constants.FORMATTED_START_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.ID;
+import static fi.tv7.taivastv7.helpers.Constants.IMAGE_PATH;
 import static fi.tv7.taivastv7.helpers.Constants.IS_SERIES;
+import static fi.tv7.taivastv7.helpers.Constants.IS_VISIBLE_ON_VOD;
 import static fi.tv7.taivastv7.helpers.Constants.LOG_TAG;
+import static fi.tv7.taivastv7.helpers.Constants.NAME;
 import static fi.tv7.taivastv7.helpers.Constants.NULL_VALUE;
 import static fi.tv7.taivastv7.helpers.Constants.ONE_STR;
 import static fi.tv7.taivastv7.helpers.Constants.PROGRAM_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SEARCH_RESULT_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.SERIES;
+import static fi.tv7.taivastv7.helpers.Constants.SERIES_AND_NAME;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SERIES_INFO_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.SHOW_ANIMATIONS;
 import static fi.tv7.taivastv7.helpers.Constants.SID;
+import static fi.tv7.taivastv7.helpers.Constants.START_DATE;
+import static fi.tv7.taivastv7.helpers.Constants.START_END_TIME;
+import static fi.tv7.taivastv7.helpers.Constants.TIME;
 import static fi.tv7.taivastv7.helpers.Constants.TIME_STAMP_FORMAT;
 import static fi.tv7.taivastv7.helpers.Constants.TV_MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.TV_PLAYER_FRAGMENT;
@@ -268,6 +285,42 @@ public abstract class Utils {
         else {
             return ZERO_DURATION;
         }
+    }
+
+    public static GuideItem getGuideItemByJsonObj(JSONObject obj) throws  Exception {
+        GuideItem guideItem = null;
+
+        if (obj != null) {
+            guideItem = new GuideItem(
+                Utils.getJsonStringValue(obj, TIME),
+                Utils.getJsonStringValue(obj, END_TIME),
+                Utils.getJsonStringValue(obj, IMAGE_PATH),
+                Utils.getJsonStringValue(obj, CAPTION),
+                Utils.getJsonStringValue(obj, START_END_TIME),
+                Utils.getJsonStringValue(obj, START_DATE),
+                Utils.getJsonStringValue(obj, END_DATE),
+                Utils.getJsonStringValue(obj, FORMATTED_START_TIME),
+                Utils.getJsonStringValue(obj, FORMATTED_END_TIME),
+                Utils.getJsonStringValue(obj, BROADCAST_DATE),
+                Utils.getJsonStringValue(obj, BROADCAST_DATE_TIME),
+                Utils.getJsonStringValue(obj, DURATION),
+                Utils.getJsonStringValue(obj, SERIES),
+                Utils.getJsonStringValue(obj, NAME),
+                Utils.getJsonIntValue(obj, SID),
+                Utils.getJsonIntValue(obj, EPISODE_NUMBER),
+                Utils.getJsonIntValue(obj, IS_VISIBLE_ON_VOD),
+                Utils.getJsonStringValue(obj, SERIES_AND_NAME),
+                Utils.isStartDateToday(Utils.getJsonStringValue(obj, TIME)));
+        }
+        return guideItem;
+    }
+
+    public static String getYesterdayUtcFormattedLocalDate() {
+        Calendar cal = getLocalCalendar();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -1);
+
+        return cal.get(Calendar.YEAR) + DASH + prependZero(cal.get(Calendar.MONTH) + 1) + DASH + prependZero(cal.get(Calendar.DATE));
     }
 
     public static String getTodayUtcFormattedLocalDate() {

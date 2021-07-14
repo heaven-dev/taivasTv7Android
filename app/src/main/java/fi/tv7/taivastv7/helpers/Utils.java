@@ -54,9 +54,12 @@ import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE;
 import static fi.tv7.taivastv7.helpers.Constants.BROADCAST_DATE_TIME;
 import static fi.tv7.taivastv7.helpers.Constants.CAPTION;
 import static fi.tv7.taivastv7.helpers.Constants.CATEGORIES_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.CATEGORY;
 import static fi.tv7.taivastv7.helpers.Constants.CHANNEL_INFO_FRAGMENT;
+import static fi.tv7.taivastv7.helpers.Constants.CID;
 import static fi.tv7.taivastv7.helpers.Constants.COLON;
 import static fi.tv7.taivastv7.helpers.Constants.DASH;
+import static fi.tv7.taivastv7.helpers.Constants.DATE_INDEX;
 import static fi.tv7.taivastv7.helpers.Constants.DOT;
 import static fi.tv7.taivastv7.helpers.Constants.DURATION;
 import static fi.tv7.taivastv7.helpers.Constants.END_DATE;
@@ -306,11 +309,15 @@ public abstract class Utils {
                 Utils.getJsonStringValue(obj, DURATION),
                 Utils.getJsonStringValue(obj, SERIES),
                 Utils.getJsonStringValue(obj, NAME),
+                Utils.getJsonStringValue(obj, CATEGORY),
                 Utils.getJsonIntValue(obj, SID),
+                Utils.getJsonIntValue(obj, CID),
+                Utils.getJsonIntValue(obj, ID),
                 Utils.getJsonIntValue(obj, EPISODE_NUMBER),
                 Utils.getJsonIntValue(obj, IS_VISIBLE_ON_VOD),
                 Utils.getJsonStringValue(obj, SERIES_AND_NAME),
-                Utils.isStartDateToday(Utils.getJsonStringValue(obj, TIME)));
+                Utils.isStartDateToday(Utils.getJsonStringValue(obj, TIME)),
+                Utils.getJsonIntValue(obj, DATE_INDEX));
         }
         return guideItem;
     }

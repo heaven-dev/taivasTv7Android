@@ -322,25 +322,13 @@ public abstract class Utils {
         return guideItem;
     }
 
-    public static String getYesterdayUtcFormattedLocalDate() {
+    public static String getUtcFormattedLocalDate(int dateIndex) {
         Calendar cal = getLocalCalendar();
         cal.setTime(new Date());
-        cal.add(Calendar.DATE, -1);
 
-        return cal.get(Calendar.YEAR) + DASH + prependZero(cal.get(Calendar.MONTH) + 1) + DASH + prependZero(cal.get(Calendar.DATE));
-    }
-
-    public static String getTodayUtcFormattedLocalDate() {
-        Calendar today = getLocalCalendar();
-        today.setTime(new Date());
-
-        return today.get(Calendar.YEAR) + DASH + prependZero(today.get(Calendar.MONTH) + 1) + DASH + prependZero(today.get(Calendar.DATE));
-    }
-
-    public static String getTomorrowUtcFormattedLocalDate() {
-        Calendar cal = getLocalCalendar();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 1);
+        if (dateIndex != 0) {
+            cal.add(Calendar.DATE, dateIndex);
+        }
 
         return cal.get(Calendar.YEAR) + DASH + prependZero(cal.get(Calendar.MONTH) + 1) + DASH + prependZero(cal.get(Calendar.DATE));
     }

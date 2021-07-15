@@ -42,6 +42,7 @@ import fi.tv7.taivastv7.model.SharedCacheViewModel;
 import static fi.tv7.taivastv7.helpers.Constants.CHANNEL_URL_PARAM;
 import static fi.tv7.taivastv7.helpers.Constants.COMING_PROGRAM_IMAGE_AND_TEXT;
 import static fi.tv7.taivastv7.helpers.Constants.DATE_INDEX;
+import static fi.tv7.taivastv7.helpers.Constants.DATE_INDEX_TOMORROW;
 import static fi.tv7.taivastv7.helpers.Constants.EMPTY;
 import static fi.tv7.taivastv7.helpers.Constants.EXIT_OVERLAY_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_DATA;
@@ -543,7 +544,7 @@ public class TvMainFragment extends Fragment implements ArchiveDataLoadedListene
 
                 int count = guideViewModel.getCountOfNextPrograms();
                 if (count <= PROGRAM_LIST_MIN_SIZE) {
-                    String date = Utils.getTomorrowUtcFormattedLocalDate();
+                    String date = Utils.getUtcFormattedLocalDate(DATE_INDEX_TOMORROW);
                     if (BuildConfig.DEBUG) {
                         Log.d(LOG_TAG, "Timer.run() Add items to guide. Date to add: " + date);
                     }

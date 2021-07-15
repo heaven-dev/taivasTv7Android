@@ -39,6 +39,7 @@ import fi.tv7.taivastv7.model.SharedCacheViewModel;
 import static fi.tv7.taivastv7.helpers.Constants.ARCHIVE_MAIN_FRAGMENT;
 import static fi.tv7.taivastv7.helpers.Constants.DATES_COUNT;
 import static fi.tv7.taivastv7.helpers.Constants.DATE_INDEX;
+import static fi.tv7.taivastv7.helpers.Constants.DATE_INDEX_TODAY;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_DATA;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_DATE_IDS;
 import static fi.tv7.taivastv7.helpers.Constants.GUIDE_FRAGMENT;
@@ -151,7 +152,7 @@ public class GuideFragment extends Fragment implements ArchiveDataLoadedListener
                 this.scrollToPosition((Integer)pageStateItem.getValue(SELECTED_POS));
             }
             else {
-                this.loadGuideByDate(Utils.getTodayUtcFormattedLocalDate(), 0);
+                this.loadGuideByDate(Utils.getUtcFormattedLocalDate(DATE_INDEX_TODAY), DATE_INDEX_TODAY);
             }
         }
         catch (Exception e) {
